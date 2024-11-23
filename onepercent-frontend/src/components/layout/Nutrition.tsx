@@ -1,50 +1,27 @@
-// components/NutritionPlan.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Save, X, Wand2 } from 'lucide-react'; // Icons used in buttons
+import { Save, X, Wand2 } from 'lucide-react';
 import { useAuth } from '@/store/userAuth';
-import DynamicIcon from '@/components/utils/DynamicIcons'; // Import the DynamicIcon component
+import DynamicIcon from '@/components/utils/DynamicIcons';
 
-// Create Axios instance with base URL
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // Ensure this environment variable is set
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
 });
 
 export default function NutritionPlan() {
-  // Updated initialMealPlan with icon names as strings
-  const initialMealPlan = [
-    {
-      meal: 'Breakfast',
-      items: ['🥞 Pancakes with syrup', '🍳 Scrambled eggs'],
-      icon: 'Coffee',
-    },
-    {
-      meal: 'Lunch',
-      items: ['🍔 Veggie burger', '🥤 Smoothie'],
-      icon: 'Utensils',
-    },
-    {
-      meal: 'Dinner',
-      items: ['🍝 Pasta with marinara sauce', '🥗 Garden salad'],
-      icon: 'Drumstick',
-    },
-    {
-      meal: 'Snacks',
-      items: ['🍎 Apple slices', '🥜 Peanut butter'],
-      icon: 'Apple',
-    },
-  ];
-
-  const [mealPlan, setMealPlan] = useState(initialMealPlan);
+  // State to hold the current meal plan displayed
+  const [mealPlan, setMealPlan] = useState(null);
+  // State to hold the saved meal plan fetched from the API or cache
+  const [savedMealPlan, setSavedMealPlan] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasGenerated, setHasGenerated] = useState(false);
-  const [hasSaved, setHasSaved] = useState(false);
   const [currentMessage, setCurrentMessage] = useState('');
   const messageIntervalRef = useRef(null);
 
-  const { token } = useAuth(); // Destructure token from useAuth hook
+  const { token } = useAuth();
 
-  // Define loading messages locally
+  const LOCALE_STORAGE_KEY = 'savedMealPlan';
+
   const loadingMessages = [
     'Customizing for your choices...',
     'Looking for good energy sources...',
@@ -56,24 +33,18 @@ export default function NutritionPlan() {
     'Aligning meals with your goals...',
   ];
 
-  // Function to get a random message
   const getRandomMessage = () => {
     const randomIndex = Math.floor(Math.random() * loadingMessages.length);
     return loadingMessages[randomIndex];
   };
 
-  // Effect to handle message cycling during loading
   useEffect(() => {
     if (loading) {
-      // Initialize with a random message
       setCurrentMessage(getRandomMessage());
-
-      // Set interval to change message every 3 seconds
       messageIntervalRef.current = setInterval(() => {
         setCurrentMessage(getRandomMessage());
       }, 3000);
     } else {
-      // Clear message and interval when not loading
       setCurrentMessage('');
       if (messageIntervalRef.current) {
         clearInterval(messageIntervalRef.current);
@@ -81,7 +52,6 @@ export default function NutritionPlan() {
       }
     }
 
-    // Cleanup on unmount or when loading changes
     return () => {
       if (messageIntervalRef.current) {
         clearInterval(messageIntervalRef.current);
@@ -89,13 +59,52 @@ export default function NutritionPlan() {
     };
   }, [loading]);
 
-  // Function to generate a new meal plan via API
+  // Fetch the saved meal plan from cache or API
+  const fetchSavedMealPlan = async () => {
+    setLoading(true);
+    try {
+      // Check if meal plan exists in localStorage
+      const cachedMealPlan = localStorage.getItem(LOCALE_STORAGE_KEY);
+      if (cachedMealPlan) {
+        const parsedMealPlan = JSON.parse(cachedMealPlan);
+        setMealPlan(parsedMealPlan);
+        setSavedMealPlan(parsedMealPlan);
+      } else {
+        // If not in cache, fetch from API
+        const response = await api.get('/get-meal-plan', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setMealPlan(response.data); // Current displayed meal plan
+        setSavedMealPlan(response.data); // Saved meal plan
+        // Save to localStorage
+        localStorage.setItem(LOCALE_STORAGE_KEY, JSON.stringify(response.data));
+      }
+      // No popup on successful fetch
+    } catch (error) {
+      console.error('Error fetching meal plan:', error);
+      alert('Failed to fetch meal plan. Please try again.');
+      setMealPlan(null); // Keep it null to indicate loading state
+      setSavedMealPlan(null);
+      localStorage.removeItem(LOCALE_STORAGE_KEY); // Clear cache on error
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSavedMealPlan();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Generate a new meal plan
   const generateMealPlan = async () => {
     setLoading(true);
-    setHasSaved(false); // Reset saved state on new generation
+    setHasGenerated(false);
 
     try {
-      // Replace '/generate-meal-plan' with your actual API endpoint
       const response = await api.post(
         '/generate-meal-plan',
         {},
@@ -107,16 +116,11 @@ export default function NutritionPlan() {
         }
       );
 
-      // Assuming the API returns mealPlan as an array with the same structure
-      // Assuming response.data.mealPlan is the meal_plan array from the backend
-      const fetchedMealPlan = response.data.mealPlan.map((meal_plan) => ({
-        meal: meal_plan.meal,
-        items: meal_plan.items,
-        icon: meal_plan.icon, // Icon names as strings
-      }));
-
-      setMealPlan(fetchedMealPlan);
+      setMealPlan(response.data); // Display the new generated meal plan
       setHasGenerated(true);
+      // Save the generated meal plan to localStorage as unsaved changes
+      localStorage.setItem(LOCALE_STORAGE_KEY, JSON.stringify(response.data));
+      // No popup on successful generation
     } catch (error) {
       console.error('Error generating meal plan:', error);
       alert('Failed to generate meal plan. Please try again.');
@@ -125,22 +129,13 @@ export default function NutritionPlan() {
     }
   };
 
-  // Function to reset to the initial meal plan
-  const resetMealPlan = () => {
-    setMealPlan(initialMealPlan);
-    setHasGenerated(false);
-    setHasSaved(false);
-  };
-
-  // Function to save the current meal plan
+  // Save the currently displayed meal plan to the API and update cache
   const saveMealPlan = async () => {
+    setLoading(true);
     try {
-      // Replace '/save-meal-plan' with your actual API endpoint
       const response = await api.post(
         '/save-meal-plan',
-        {
-          mealPlan: mealPlan,
-        },
+        mealPlan, // Send the complete meal plan object including date and uuid
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -149,21 +144,83 @@ export default function NutritionPlan() {
         }
       );
 
-      // Handle response as needed
-      alert('Meal plan saved successfully!');
-      setHasSaved(true);
+      setSavedMealPlan(response.data); // Update the saved meal plan with the new one
+      setHasGenerated(false);
+      // Update localStorage with the saved meal plan
+      localStorage.setItem(LOCALE_STORAGE_KEY, JSON.stringify(response.data));
+      // No popup on successful save
     } catch (error) {
       console.error('Error saving meal plan:', error);
       alert('Failed to save meal plan. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
+
+  // Reset to the last saved meal plan
+  const resetMealPlan = () => {
+    if (savedMealPlan) {
+      setMealPlan(savedMealPlan);
+      setHasGenerated(false);
+      // Update localStorage to reflect the reset
+      localStorage.setItem(LOCALE_STORAGE_KEY, JSON.stringify(savedMealPlan));
+    }
+  };
+
+  // Format the date for display
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
+  // Render loading spinner if mealPlan is null (loading state)
+  if (mealPlan === null) {
+    return (
+      <div className="flex flex-col justify-center items-center bg-white rounded-lg shadow-md p-6 h-full">
+        <div className="flex flex-col items-center">
+          <svg
+            className="animate-spin h-8 w-8 text-blue-500 mb-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v8H4z"
+            ></path>
+          </svg>
+          <p className="text-gray-500">Loading your meal plan...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col justify-between bg-white rounded-lg shadow-md p-6 h-full">
       <div>
-        <h2 className="text-xl font-semibold mb-4 text-center">Today's Nutrition Plan</h2>
+        <div className="text-center mb-4">
+          <h2 className="text-xl font-semibold">Nutrition Plan</h2>
+          {mealPlan.date && (
+            <p className="text-sm text-gray-500 mt-1">
+              {formatDate(mealPlan.date)}
+            </p>
+          )}
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {mealPlan.map((meal, index) => (
+          {mealPlan.meal_plan.map((meal, index) => (
             <div key={index} className="bg-gray-100 rounded-lg shadow-sm p-3">
               <div className="flex items-center">
                 <DynamicIcon iconName={meal.icon} className="h-6 w-6 text-green-500" />
@@ -179,13 +236,11 @@ export default function NutritionPlan() {
         </div>
       </div>
       <div className="mt-6 flex flex-col items-center">
-        {/* Display loading message if loading */}
         {loading && currentMessage && (
           <div className="mb-2 text-center text-xs text-gray-500">{currentMessage}</div>
         )}
         <div className="flex justify-center space-x-3">
-          {/* Conditionally render Save and Reset buttons */}
-          {hasGenerated && !hasSaved && !loading && (
+          {hasGenerated && !loading && (
             <>
               <button
                 onClick={resetMealPlan}
@@ -205,7 +260,6 @@ export default function NutritionPlan() {
               </button>
             </>
           )}
-          {/* Generate Button */}
           <button
             onClick={generateMealPlan}
             disabled={loading}

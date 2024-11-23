@@ -6,7 +6,7 @@ client = OpenAI(
     api_key = os.getenv("OPENAI_API_KEY")  # This is the default and can be omitted
 )
 
-async def get_openai_nutrition_suggestions(prompt: str) -> str:
+def get_openai_nutrition_suggestions(prompt: str) -> str:
     try:
         response = client.chat.completions.create(
             model="gpt-4o",

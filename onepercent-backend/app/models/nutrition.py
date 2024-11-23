@@ -1,27 +1,20 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Dict
+from datetime import datetime
 
-
-class Meal(BaseModel):
+class MealItem(BaseModel):
     meal: str
     items: List[str]
     icon: str
 
-    def to_dict(self):
-        return {
-            'meal': self.meal,
-            'items': self.items,
-            'icon': self.icon
-        }
 class NutritionPlan(BaseModel):
-    meal_plan: List[Meal]
+    meal_plan: List[MealItem]
+    date: datetime = None
+    uuid: str = None
+
     def to_dict(self):
         return {
-            'mealPlan': [meal.to_dict() for meal in self.meal_plan]
+            "meal_plan": [item.dict() for item in self.meal_plan],
+            "date": self.date.isoformat() if self.date else None,
+            "uuid": self.uuid,
         }
-
-
-class SavePlanRequest(BaseModel):
-    plan_id: Optional[str] = None
-    nutrition_plan: Optional[NutritionPlan] = None
-    created_at: Optional[str] = None  # ISO format datetime string
