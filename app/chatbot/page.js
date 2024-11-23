@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useUser } from "../context/userContext";
-import { getAIResponse } from "./openaiHelper";
+import { getAIResponse } from "/app/openaihelper.js";
 
 const Chatbot = () => {
   const { user } = useUser();
