@@ -38,3 +38,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+onepercent-backend/app/certs/onepercenthack-firebase-adminsdk-js8sc-dd7ff57367.jsongit add .gitignore
