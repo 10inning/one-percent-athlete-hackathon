@@ -17,10 +17,10 @@ One Percent Athlete is a comprehensive fitness platform that leverages artificia
 
 <p float="left">
   <img src="https://github.com/user-attachments/assets/632dcb64-eddd-4829-9bcb-87e350f6fa94" width="400" />
-![3per](https://github.com/user-attachments/assets/f46425fb-7652-4918-b0c1-cdffd7bbafed)
-![4per](https://github.com/user-attachments/assets/4092a635-37d2-4d63-82c3-bd9a429362b3)
-![5per](https://github.com/user-attachments/assets/b55731ee-d3c8-47bc-97cd-199d431e5f2b)
-![1per](https://github.com/user-attachments/assets/453733ce-e829-41d7-915e-051cdf1fda1d)
+  <img src="https://github.com/user-attachments/assets/f46425fb-7652-4918-b0c1-cdffd7bbafed" width="400" />
+  <img src="https://github.com/user-attachments/assets/4092a635-37d2-4d63-82c3-bd9a429362b3" width="400" />
+  <img src="https://github.com/user-attachments/assets/b55731ee-d3c8-47bc-97cd-199d431e5f2b" width="400" />
+  <img src="https://github.com/user-attachments/assets/453733ce-e829-41d7-915e-051cdf1fda1d" width="400" />
 </p>
 
 
