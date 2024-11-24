@@ -1,88 +1,188 @@
-# one-percent-athlete-hackathon
-Official repository for The One Percent Athlete Hackathon hosted by 10th Inning Ventures.
+# AI Fitness Coach Web Application
 
-### The One Percent Athlete Hackathon
-Hosted by 10th Inning Ventures
+**Team Members:**   
+Atharva Ajit Waranashiwar \- \[[https://www.facebook.com/atharva.waranashiwar/](https://www.facebook.com/atharva.waranashiwar/)\]  
+Yaffet Seboka \- \[[https://www.linkedin.com/in/yseboka/](https://www.linkedin.com/in/yseboka/)\]  
+Yewoinhareg Geberemariam \- \[[https://www.linkedin.com/in/yewoinhareg-geberemariam-yewoin/](https://www.linkedin.com/in/yewoinhareg-geberemariam-yewoin/)
 
-# The One Percent Athlete Hackathon  
-Hosted by **10th Inning Ventures**  
+**UI Design** 1\)   
+\[Figma Link\] \-   
+[https://www.figma.com/design/wRtAxuCPWA868MxqE4gNsK/Hackathon?node-id=0-1\&node-type=canvas\&t=VEbO8SGEVwQc2AZA-0](https://www.figma.com/design/wRtAxuCPWA868MxqE4gNsK/Hackathon?node-id=0-1&node-type=canvas&t=VEbO8SGEVwQc2AZA-0) 
 
-Welcome to the official repository for **The One Percent Athlete Hackathon**! This is your central hub for submitting your project, accessing resources, and collaborating with your team.
+(\#) 2\) \[Video Link\] \- [https://drive.google.com/file/d/1mz4CGdRJHa4CvMbnsBnwMiIasZmXHP00/view?usp=sharing](https://drive.google.com/file/d/1mz4CGdRJHa4CvMbnsBnwMiIasZmXHP00/view?usp=sharing) 
+
+## Overview
+
+This web application is an AI-powered fitness coaching platform that provides personalized advice and feedback for athletes based on their fitness data. The application features user authentication, a dynamic chatbot interface, performance dashboards, and interactive data visualization.
 
 ---
 
-## 📖 Overview  
+## Features
 
-The One Percent Athlete Hackathon is a 3-day remote event where talented engineers and designers build innovative solutions to empower athletes. Your challenge is to create functional, impactful, and scalable solutions aligned with our mission of developing holistic athletes.  
+### 1\. **AI Chatbot**
+
+- Interactive chatbot powered by OpenAI GPT.  
+- Personalized responses based on user data and metrics.  
+- Markdown-like formatting in AI responses for better readability.
+
+### 2\. **User Dashboard**
+
+- Displays fitness metrics such as body weight, power score, jump score, speed score, and relative strength score.  
+- Visual progress indicators for each metric.  
+- Display other users 
+
+### 3\. **Sidebar Navigation**
+
+- Easy navigation to:  
+  - Profile Dashboard  
+  - AI Chatbot  
+  - Settings  
+  - Logout  
+- User photo and name displayed dynamically.
+
+### 4\. **Authentication**
+
+- User login functionality.  
+- Secure password storage using Firebase and bcrypt.js.  
+- Logout functionality that redirects to the sign-in page.
 
 ---
 
-## 🚀 Getting Started  
+## Technologies Used
 
-### 1. **Fork This Repository**
-- Click the **"Fork"** button in the top-right corner of this page to create a copy of this repository under your GitHub account.
+### Frontend:
 
-### 2. **Clone Your Forked Repository**
-- Copy the HTTPS or SSH URL from your forked repository and clone it to your local machine:
-  ```bash
-  git clone <your-forked-repo-url>
-  cd one-percent-athlete-hackathon
-### 3. Start Building Your Solution
-Add your project files (code, assets, documentation, etc.) to the repository.
-Ensure your project is organized and follows the required submission structure:
+- **Next.js**: Framework for building server-side rendered React applications.  
+- **CSS Modules**: For modular and reusable styling.  
+- **Firebase Authentication**: Secure user authentication and data storage.
 
-bash
-Copy code
-├── README.md        # Project overview and instructions
-├── /src             # Source code
-├── /assets          # Images, icons, or other media
-└── /docs            # Additional documentation (optional)
+### Backend:
 
-### 4. Commit and Push Your Work
-After developing your solution, commit and push your changes to your forked repository:
-bash
-Copy code
-git add .
-git commit -m "Initial commit with project files"
-git push origin main
+- **OpenAI API**: For generating chatbot responses.  
+- **Firebase Firestore**: Cloud database for user and metrics data.
 
-### 5. Submit a Pull Request
-Go to this original repository (10th Inning Hackathon Repo) and click the "Pull Requests" tab.
-Click "New Pull Request" and follow the prompts to submit your work.
-Include the following in your pull request:
-Project Name
-Team Members
-Challenge Addressed
-Brief Description of Your Solution
-🛠 Submission Requirements
+---
 
-### Checklist:
-Code Repository: Ensure your code is functional and well-documented.
-README File: Include the following:
-Project name and description.
-Team members and their roles.
-Instructions for running the code locally.
-Any dependencies or setup steps.
+## Installation and Setup
 
-### Optional Deliverables:
-Demo video link (e.g., YouTube or Vimeo).
-Additional documentation or slides (if applicable).
-Submission Deadline:
-Sunday, November 24, 2024, at 2:00 PM EST.
+1. **Clone the Repository:**  
+     
+   git clone https://github.com/your-repo/ai-fitness-coach.git  
+     
+   cd ai-fitness-coach  
+     
+2. **Install Dependencies:**  
+     
+   npm install  
+     
+3. **Set Up Environment Variables:**  
+     
+   - Create a `.env.local` file in the root directory and add the following:  
+       
+     NEXT\_PUBLIC\_OPENAI\_API\_KEY=your-openai-api-key  
+       
+     NEXT\_PUBLIC\_FIREBASE\_API\_KEY=your-firebase-api-key  
+       
+     NEXT\_PUBLIC\_FIREBASE\_AUTH\_DOMAIN=your-firebase-auth-domain  
+       
+     NEXT\_PUBLIC\_FIREBASE\_PROJECT\_ID=your-firebase-project-id
 
-🏆 Prizes
-🥇 Winning Team: $2,000
-🥈 Runner-Up Team: $800
-🥉 Third Place Team: $200
-Winners will be announced during the Closing Ceremony on Sunday at 6:00 PM EST.
+     
+4. **Run the Development Server:**  
+     
+   npm run dev  
+     
+5. **Access the Application:** Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-💬 Support
-Need Help?
-Post your questions in the #help-desk channel on Slack.
-Reach out to mentors in the #mentors channel for technical or design advice.
+---
 
-📄 License
-By submitting your project, you agree that your code and solution become the property of 10th Inning Ventures under the terms outlined in the Hackathon Participation Agreement.
+## Project Structure
 
-Good luck, and we can’t wait to see your innovative solutions! 🎉
+.
+
+├── app/
+
+│   ├── chatbot/
+
+│   ├── profile/
+
+│   ├── layout.js
+
+│   └── page.js
+
+├── components/
+
+│   ├── Sidebar.js
+
+│   ├── EditProfileModal.js
+
+│   ├── CircularBar.js
+
+├── context/
+
+│   └── userContext.js
+
+├── firebase/
+
+│   └── firebase.js
+
+├── public/
+
+│   └── Images/
+
+└── styles/
+
+    └── globals.css
+
+---
+
+## How It Works
+
+1. **User Authentication:**  
+     
+   - Users can sign in to access personalized data.  
+   - Authentication is managed using Firebase.
+
+   
+
+2. **AI Chatbot:**  
+     
+   - The chatbot uses data from the Firestore database to provide tailored responses.  
+   - Data includes fitness metrics like power score, jump score, etc.
+
+   
+
+3. **Dashboard Metrics:**  
+     
+   - Scores are categorized into performance levels such as JV, VAR, and Div. I.  
+   - Circular progress bars visually represent the current performance level.
+
+   
+
+4. **Logout:**  
+     
+   - Logs the user out and redirects to the sign-in page.
+
+---
+
+## Future Enhancements
+
+- Real-time data updates using Firebase Realtime Database.  
+- Improved chatbot contextual awareness.  
+- Mobile-friendly UI enhancements.  
+- Integration with wearable devices for automated data updates.
+
+---
+
+## Contributing
+
+Contributions are welcome\! Please fork the repository and submit a pull request.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
+
+---
 

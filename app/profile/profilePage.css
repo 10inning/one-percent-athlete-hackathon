@@ -1,0 +1,36 @@
+.box {
+  margin: 10px;
+  padding: 10px;
+  width: 300px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: #2b2e36;
+}
+
+.mainPageTop .box {
+  width: 330px;
+  height: 230px;
+}
+
+.performanceBox {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.bioImageContainer {
+  width: 100%;
+  height: 180px;
+  margin-bottom: 10px;
+  background-image: url("/athleteBanner.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.findFriends{
+    background-image: url("/findFriend.jpg");
+    background-size: 115%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
