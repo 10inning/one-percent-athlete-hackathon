@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Save, X, Wand2 } from 'lucide-react';
 import { useAuth } from '@/store/userAuth';
 import DynamicIcon from '@/components/utils/DynamicIcons';
-import { FaAppleAlt } from "react-icons/fa";
+import { FaLeaf  } from "react-icons/fa";
 import { motion } from "framer-motion";
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -212,30 +212,35 @@ export default function NutritionPlan() {
   return (
    <div className="flex flex-col justify-between bg-white rounded-lg shadow-md p-3 h-full">
   <div>
-  <div className="text-center mb-6 p-6 bg-gradient-to-r from-green-200 via-blue-100 to-purple-200 rounded-lg shadow-lg">
-      <motion.h2
-        className="text-2xl font-bold text-gray-800 flex items-center justify-center gap-2"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <FaAppleAlt className="text-green-500" />
-        Nutrition Plan
-      </motion.h2>
-      {mealPlan.date && (
-        <motion.p
-          className="text-sm text-gray-600 mt-2 italic"
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-        >
-          {formatDate(mealPlan.date)}
-        </motion.p>
-      )}
-    </div>
+
+    
+  <div className="text-center p-6 bg-gradient-to-r from-green-200 via-blue-100 to-purple-200 rounded-lg shadow-lg">
+  <motion.h2
+    className="text-2xl font-extrabold text-gray-900 flex items-center justify-center gap-2"
+    initial={{ opacity: 0, y: -10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.4, ease: "easeOut" }}
+  >
+    <FaLeaf  className="text-green-600" />
+    Eat Right
+  </motion.h2>
+  {mealPlan.date && (
+    <motion.p
+      className="text-sm text-gray-700 mt-3 italic"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2, duration: 0.4, ease: "easeOut" }}
+    >
+      {formatDate(mealPlan.date)}
+    </motion.p>
+  )}
+</div>
+
+
+
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
       {mealPlan.meal_plan.map((meal, index) => (
-        <div key={index} className="bg-gray-100 rounded-lg shadow-sm p-2">
+        <div key={index} className="bg-gray-100 rounded-lg shadow-sm p-4 mt-6">
           <div className="flex items-center mb-2">
             <DynamicIcon iconName={meal.icon} className="h-5 w-5 text-green-500" />
             <h3 className="ml-2 text-md font-medium">{meal.meal}</h3>

@@ -11,6 +11,7 @@ const VideoUpload = () => {
   const [uploadStatus, setUploadStatus] = useState('');
   const [progress, setProgress] = useState(0);
   const [analysisResults, setAnalysisResults] = useState(null);
+  const [zoomImage, setZoomImage] = useState(null); // State for zoomed image
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -95,13 +96,22 @@ const VideoUpload = () => {
     }
   }, [file, chunkSize]);
 
+  const ImageCard = React.memo(({ image, message }) => (
+    <div
+      className="relative p-4 bg-white shadow rounded-lg group cursor-pointer"
+      onClick={() => setZoomImage(image)}
+    >
+      <img
+        src={`data:image/jpeg;base64,${image}`}
+        alt="Thumbnail"
+        className="w-full h-32 object-cover rounded-lg"
+      />
+      <p className="text-sm mt-2">{message}</p>
+    </div>
+  ));
+
   return (
     <div className="space-y-6 p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold text-center text-gray-800">
-        <span className="text-blue-600">AI</span>-Powered Workout Analyzer
-      </h1>
-
-      {/* File Upload Section */}
       <div className="flex flex-col items-center">
         <input
           type="file"
@@ -119,12 +129,11 @@ const VideoUpload = () => {
         </label>
       </div>
 
-      {/* Upload Button */}
       {file && (
         <button
           onClick={handleUpload}
           disabled={progress > 0 && progress < 100}
-          className="w-full px-6 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
+          className="w-full px-6 py-3 bg-green-400 text-white rounded-lg shadow-md hover:bg-green-300 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all"
         >
           {progress === 0
             ? 'Start Upload'
@@ -134,7 +143,6 @@ const VideoUpload = () => {
         </button>
       )}
 
-      {/* Progress and Status */}
       {uploadStatus && (
         <div className="mt-4 text-center">
           {uploadStatus.includes('failed') ? (
@@ -156,7 +164,6 @@ const VideoUpload = () => {
         </div>
       )}
 
-      {/* Analysis Results */}
       {analysisResults && (
         <div className="mt-6 space-y-8">
           <div className="p-6 bg-gray-50 border rounded-lg shadow">
@@ -182,7 +189,6 @@ const VideoUpload = () => {
                   {analysisResults.stats.good_form_reps}
                 </p>
               </div>
-              {/* Add similar blocks for other stats */}
             </div>
           </div>
 
@@ -191,18 +197,33 @@ const VideoUpload = () => {
               <h2 className="text-lg font-semibold text-gray-800">Form Issues</h2>
               <div className="grid grid-cols-3 gap-4 mt-4">
                 {analysisResults.bad_form_frames.map((frame, index) => (
-                  <div key={index} className="p-4 bg-white shadow rounded-lg">
-                    <img
-                      src={`data:image/jpeg;base64,${frame.image}`}
-                      alt={`Issue ${index}`}
-                      className="w-full h-32 object-cover rounded-lg"
-                    />
-                    <p className="text-sm mt-2">{frame.message}</p>
-                  </div>
+                  <ImageCard
+                    key={index}
+                    image={frame.image}
+                    message={frame.message}
+                  />
                 ))}
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {zoomImage && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+          <div className="relative">
+            <img
+              src={`data:image/jpeg;base64,${zoomImage}`}
+              alt="Zoomed"
+              className="max-w-screen-lg max-h-screen object-contain rounded-lg"
+            />
+            <button
+              className="absolute top-3 right-3 text-white text-xl bg-gray-800 rounded-full p-2 hover:bg-gray-600"
+              onClick={() => setZoomImage(null)}
+            >
+              &times;
+            </button>
+          </div>
         </div>
       )}
     </div>
