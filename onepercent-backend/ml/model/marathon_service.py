@@ -1,25 +1,34 @@
 import pickle
-import pandas as pd
+import numpy as np
 from pathlib import Path
 
 def predict_marathon(input_features: list):
-    current_dir = Path(__file__).resolve().parent  
-
+    """
+    Predicts the marathon outcome using a pre-trained pipeline.
+    Args:
+    - input_features (list): Features prepared for the model in the correct order.
+    Returns:
+    - float: Predicted value.
+    """
+    # Resolve the current directory and model path
+    current_dir = Path(__file__).resolve().parent
     model_path = current_dir / "../mlmodels/regressor.pkl"
-    model_path = model_path.resolve()  
+    model_path = model_path.resolve()
 
+    # Load the pipeline and feature order
     with open(model_path, 'rb') as file:
-        data = pickle.load(file)
+        saved_data = pickle.load(file)
 
-    pipeline = data['pipeline']
-    feature_order = data['features']
+    pipeline = saved_data['pipeline']  # Extract the pipeline
+    print(pipeline)
+    # Prepare features for prediction
+    input_features = np.array(input_features).reshape(1, -1)  # Ensure correct shape
+    prediction = pipeline.predict(input_features)[0]  # Perform the prediction
 
-    if not hasattr(pipeline, 'predict'):
-        raise ValueError("The loaded pipeline is not correctly fitted.")
+    return prediction
 
-    input_df = pd.DataFrame([input_features], columns=feature_order)
-
-    prediction = pipeline.predict(input_df)
-
-    return prediction[0]  
-
+# Example of running inference
+if __name__ == "__main__":
+    features_example = [80, 13, 1.6306, 0, 0, 1, 0, 0, 0]  # Replace with actual prepared features
+    result = predict_marathon(features_example)
+    print(f"Predicted marathon time: {result}")
