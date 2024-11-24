@@ -53,16 +53,16 @@ const Chatbot = () => {
       // Check for numbered lists (e.g., "1. ", "2. ")
       if (/^\d+\.\s/.test(trimmedLine)) {
         return (
-          <p key={index}>
+          <div key={index}>
             <strong>{trimmedLine.split(".")[0]}.</strong>{" "}
             {convertMarkdownToHTML(trimmedLine.slice(trimmedLine.indexOf(".") + 1).trim())}
-          </p>
+          </div>
         );
       }
 
       // Check for bold Markdown (**bold text**)
       return (
-        <p key={index}>{convertMarkdownToHTML(trimmedLine)}</p>
+        <div key={index}>{convertMarkdownToHTML(trimmedLine)}</div>
       );
     });
   };
@@ -100,7 +100,7 @@ const Chatbot = () => {
               }}
               className={entry.sender === "user" ? "userMessage" : "aiMessage"}
             >
-              <p
+              <div
                 style={{
                   marginLeft: entry.sender === "assistant" ? "40px" : "0px",
                   fontSize: "30px",
@@ -109,7 +109,7 @@ const Chatbot = () => {
                 }}
               >
                 {entry.sender === "assistant" ? entry.text : entry.text}
-              </p>
+              </div>
             </div>
           ))}
           {isTyping && (
