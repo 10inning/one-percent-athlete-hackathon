@@ -45,6 +45,7 @@ def generate_nutrition_plan(
             user_id=user_id,
             plan=nutrition_plan
         )
+        # print(saved_plan)
         return saved_plan.to_dict()  # Return dictionary for UI compatibility
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

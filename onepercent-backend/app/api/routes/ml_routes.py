@@ -1,8 +1,11 @@
 from fastapi import APIRouter, UploadFile, File, Form
 import shutil
 from pathlib import Path
-from ml.model.posture_service import analyze_pushups  # Import the function
+from ml.model.posture_service import analyze_pushups  
 from typing import Dict
+from fastapi import APIRouter, HTTPException
+from ml.model.marathon_service import predict_marathon  
+from typing import List, Dict
 
 ml_router = APIRouter()
 UPLOAD_DIR = Path("uploads")
@@ -40,7 +43,6 @@ def upload_chunk(
 
             # Call the PushupAnalyzer function on the uploaded video
             results = analyze_pushups(str(final_file_path))
-            print(results)
             return {
                 "message": "Upload and analysis completed successfully!",
                 "analysis_results": results,
@@ -51,3 +53,16 @@ def upload_chunk(
 
     except Exception as e:
         return {"error": f"Error processing chunk: {str(e)}"}
+@ml_router.post("/ml/marathon/predict")
+def marathon_predict(features: List[float]) -> Dict:
+   
+    try:
+        prediction = predict_marathon(features)
+
+        return {
+            "message": "Prediction successful!",
+            "prediction": prediction,
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error making prediction: {str(e)}")

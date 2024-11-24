@@ -6,6 +6,7 @@ class MealItem(BaseModel):
     meal: str
     items: List[str]
     icon: str
+    calories: int
 
 class NutritionPlan(BaseModel):
     meal_plan: List[MealItem]

@@ -62,29 +62,59 @@ class NutritionService:
             raise ValueError(f"Error generating nutrition plan: {e}")
 
     def _create_prompt(self, user_details: Dict) -> str:
-        # Extract user details
-        sport = user_details.get("sport", "general fitness")
-        nutrition_preferences = user_details.get("nutrition_preferences", "balanced diet")
-        allergies = user_details.get("allergies", [])
+        # Extract user details with defaults
+        sport = user_details.get("target_sport", "general fitness") or "general fitness"
+        nutrition_preferences = user_details.get("diet_preference", "balanced diet") or "balanced diet"
+        allergies = user_details.get("allergies") or []  # Default to empty list if None
+        preferred_foods = user_details.get("preferred_foods") or []  # Default to empty list if None
+        health_conditions = user_details.get("health_conditions") or []  # Default to empty list if None
+        weight = user_details.get("weight") or 70.0  # Default to 70 kg if not provided
+        height = user_details.get("height") or 175.0  # Default to 175 cm if not provided
+        age = user_details.get("age", 30)  # Default to age 30
+        location = user_details.get("location", "unknown location") or "unknown location"
+
+        # Calculate calories using Harris-Benedict formula with activity adjustment
+        bmr = 10 * weight + 6.25 * height - 5 * age + 5  # Basal Metabolic Rate (BMR) for males; subtract 161 for females
+        sport_multipliers = {
+            "basketball": 1.75,
+            "running": 1.8,
+            "swimming": 1.7,
+            "cycling": 1.6,
+            "yoga": 1.4,
+            "general fitness": 1.5
+        }
+        activity_multiplier = sport_multipliers.get(sport.lower(), 1.5) if isinstance(sport, str) else 1.5
+        calorie_requirement = int(bmr * activity_multiplier)
+
+        # Prepare allergies and preferences in text
+        allergy_text = ", ".join(allergies) if allergies else "no allergies"
+        preferred_foods_text = ", ".join(preferred_foods) if preferred_foods else "no specific preferences"
+        health_conditions_text = ", ".join(health_conditions) if health_conditions else "none"
 
         # Create the prompt
         prompt = (
-            f"Create a personalized nutrition plan for a user who is engaged in {sport}, "
-            f"has the following nutrition preferences: {nutrition_preferences}, "
-            f"and has the following allergies: {', '.join(allergies)}.\n"
+            f"Create a personalized nutrition plan for a user engaged in {sport} from {location}, "
+            f"who weighs {weight} kg and is {height} cm tall. "
+            f"The user prefers a {nutrition_preferences} diet with the following food preferences: {preferred_foods_text}, "
+            f"and has the following allergies: {allergy_text}. "
+            f"They also have the following health conditions: {health_conditions_text}. "
+            f"The user requires approximately {calorie_requirement} calories per day (not Strict).\n"
+            f"The user only prefers to have not more than 4 meals a day"
             f"Provide the meal plan in JSON format as shown below:\n\n"
             "```\n"
             "{\n"
-            '  "meal_plan": [\n'  # Changed to "meal_plan"
+            '  "meal_plan": [\n'
             '    {\n'
             '      "meal": "Breakfast",\n'
             '      "items": ["🥞 Pancakes with syrup", "🍳 Scrambled eggs"],\n'
-            '      "icon": "Coffee"\n'
+            '      "icon": "Coffee",\n'
+            f'      "calories": 500\n'
             '    },\n'
             '    {\n'
             '      "meal": "Lunch",\n'
             '      "items": ["🍔 Veggie burger", "🥤 Smoothie"],\n'
-            '      "icon": "Utensils"\n'
+            '      "icon": "Utensils",\n'
+            f'      "calories": 600\n'
             '    }\n'
             '  ]\n'
             '}\n'
@@ -92,6 +122,8 @@ class NutritionService:
             "Only provide the JSON code inside the triple backticks."
         )
         return prompt
+
+
 
 
 

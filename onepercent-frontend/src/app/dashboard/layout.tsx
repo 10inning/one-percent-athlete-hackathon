@@ -1,13 +1,13 @@
 'use client';
+
 import { useAuth } from '@/store/userAuth';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { MessageSquare, Home, Settings, LogOut } from 'lucide-react';
+import { Home, MessageSquare, Settings, LogOut, Cpu } from 'lucide-react';
 import { useEffect } from 'react';
-import ProfileSection from '@/components/layout/profileSection';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading, logout } = useAuth(); // Assuming you have a logout method
+  const { user, loading, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -18,7 +18,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [user, loading, router]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
   }
 
   if (!user) {
@@ -26,87 +26,94 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
-    {/* Sidebar */}
-    <aside className="w-64 bg-white shadow-md flex flex-col">
-      <div className="p-6 flex items-center space-x-4">
-        {/* User Image or Logo */}
-        <img
-          src="https://static.vecteezy.com/system/resources/thumbnails/029/872/599/small/illustration-of-people-running-in-solid-color-use-for-exercising-of-athletics-logo-vector.jpg"
-          className="w-12 h-12 rounded-full object-cover border-2 border-blue-600"
-          alt="User Avatar"
-        />
-        {/* Text Section */}
-        <div>
-          <h2 className="text-xl font-bold text-gray-800">
-            {user?.displayName
-              ? `Welcome, ${user.displayName.split(" ")[0]}`
-              : "Welcome, Athlete"}
-          </h2>
-          <p className="text-sm text-gray-500">Stay motivated, stay strong!</p>
+    <div className="flex h-screen bg-gray-50 text-gray-800">
+      {/* Sidebar */}
+      <aside className="w-72 bg-white shadow-md flex flex-col">
+        <div className="p-8 flex items-center space-x-4">
+          {/* User Image */}
+          <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/029/872/599/small/illustration-of-people-running-in-solid-color-use-for-exercising-of-athletics-logo-vector.jpg"
+            className="w-14 h-14 rounded-full object-cover border-2 border-blue-600 shadow"
+            alt="User Avatar"
+          />
+          {/* Welcome Section */}
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900">
+              {user?.displayName ? `Hello, ${user.displayName.split(' ')[0]}` : 'Hello, Athlete'}
+            </h2>
+            <p className="text-sm text-gray-600">AI-Powered Performance Edge</p>
+          </div>
         </div>
-      </div>
 
-      <nav className="flex-1">
-        <ul>
-          <li>
-            <Link
-              href="/dashboard"
-              className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100"
-            >
-              <Home className="w-5 h-5 mr-3" />
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/dashboard/chat"
-              className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100"
-            >
-              <MessageSquare className="w-5 h-5 mr-3" />
-              All You Need
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/dashboard/settings"
-              className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100"
-            >
-              <Settings className="w-5 h-5 mr-3" />
-              Settings
-            </Link>
-          </li>
-        </ul>
-      </nav>
-      <button
-        onClick={logout}
-        className="flex items-center px-6 py-3 text-red-600 hover:bg-red-100"
-      >
-        <LogOut className="w-5 h-5 mr-3" />
-        Logout
-      </button>
-    </aside>
+        <nav className="flex-1 mt-4">
+          <ul className="space-y-2">
+            <li>
+              <Link
+                href="/dashboard"
+                className={`flex items-center px-6 py-3 rounded-lg transition hover:bg-gray-100 ${
+                  pathname === '/dashboard' ? 'bg-gray-100' : ''
+                }`}
+              >
+                <Home className="w-5 h-5 mr-3 text-blue-600" />
+                Dashboard
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/dashboard/chat"
+                className={`flex items-center px-6 py-3 rounded-lg transition hover:bg-gray-100 ${
+                  pathname === '/dashboard/chat' ? 'bg-gray-100' : ''
+                }`}
+              >
+                <Cpu className="w-5 h-5 mr-3 text-purple-600" />
+                AI Companion
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/dashboard/settings"
+                className={`flex items-center px-6 py-3 rounded-lg transition hover:bg-gray-100 ${
+                  pathname === '/dashboard/settings' ? 'bg-gray-100' : ''
+                }`}
+              >
+                <Settings className="w-5 h-5 mr-3 text-gray-600" />
+                Settings
+              </Link>
+            </li>
+          </ul>
+        </nav>
+        <div className="p-6">
+          <button
+            onClick={logout}
+            className="w-full flex items-center justify-center px-4 py-3 text-red-500 border border-red-500 rounded-lg hover:bg-red-100 transition"
+          >
+            <LogOut className="w-5 h-5 mr-2" />
+            Logout
+          </button>
+        </div>
+      </aside>
 
-    {/* Main Content Area */}
-    <div className="flex-1 flex flex-col">
-      {/* Banner Section */}
-      <div className="bg-gradient-to-r from-white/80 via-blue-500/70 to-black/80 text-white text-center py-3 shadow-md">
-        <h1 className="text-2xl font-bold tracking-tight">
-          Welcome to <span className="text-white">Athlete Edge</span>
-        </h1>
-        <p className="text-base mt-2 text-black/60">
-          <em>Push beyond your limits. Achieve greatness.</em>
-        </p>
-        {user?.displayName && (
-          <p className="mt-2 text-sm text-gray-200">
-            Logged in as <strong>{user.displayName}</strong>
-          </p>
-        )}
-      </div>
-
-      {/* Content Area */}
-      <main className="flex-1 p-6 overflow-y-auto bg-gray-100">{children}</main>
-    </div>
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col">
+        {/* Banner */}
+        <header className="bg-white text-gray-900 text-center py-6 shadow-sm">
+  <div className="max-w-screen-lg mx-auto">
+    <h1 className="text-4xl font-semibold tracking-tight">Athlete Edge</h1>
+    <p className="mt-1 text-base text-gray-500">Empowering Performance with AI</p>
+    {user?.displayName && (
+      <p className="mt-4 text-sm text-gray-400">
+        Logged in as <strong className="text-gray-600">{user.displayName}</strong>
+      </p>
+    )}
   </div>
+</header>
+
+
+        {/* Content */}
+        <main className="flex-1 p-0 overflow-y-auto bg-gray-100">
+          {children}
+        </main>
+      </div>
+    </div>
   );
 }
