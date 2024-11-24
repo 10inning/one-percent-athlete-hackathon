@@ -1,37 +1,28 @@
-"use client";
+import { createContext, useContext, useEffect, useState } from "react";
+import { getCookie, deleteCookie } from "cookies-next";
 
-import { createContext, useContext, useState, useEffect } from "react";
-
-// Create Context
 const UserContext = createContext();
 
-// Provide Context
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // To store user data
+  const [user, setUser] = useState(null);
 
-  // Restore user session from localStorage on app load
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const userCookie = getCookie("user");
+    if (userCookie) {
+      setUser(JSON.parse(userCookie));
     }
   }, []);
 
-  // Update localStorage whenever user changes
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
-    }
-  }, [user]);
+  const logout = () => {
+    setUser(null);
+    deleteCookie("user");
+  };
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, logout }}>
       {children}
     </UserContext.Provider>
   );
 };
 
-// Custom Hook to use User Context
 export const useUser = () => useContext(UserContext);

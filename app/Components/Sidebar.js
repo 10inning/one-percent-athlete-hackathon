@@ -5,11 +5,12 @@ import { doc, getDoc } from "firebase/firestore";
 import { useUser } from "../context/userContext";
 import Pfp from "./Images/bigRecruitsLogo.png";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
   const { user } = useUser();
   const [name, setName] = useState("");
-
+  const router = useRouter();
   useEffect(() => {
     const fetchUserData = async () => {
       if (user) {
@@ -31,6 +32,10 @@ export default function Sidebar() {
 
     fetchUserData();
   }, [user]);
+  const handleLogout = () => {
+    setUser(null); // Clear the user from context
+    router.push("/signin"); // Redirect to the sign-in page
+  };
 
   return (
     <div
@@ -240,7 +245,7 @@ export default function Sidebar() {
           </svg>{" "}
           Settings
         </p>
-        <p style={{ cursor: "pointer", display: "flex" }}>
+        <p style={{ cursor: "pointer", display: "flex" }} onClick={handleLogout}>
           <svg
             style={{ marginRight: "20px" }}
             stroke="currentColor"

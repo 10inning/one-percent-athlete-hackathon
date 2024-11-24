@@ -6,6 +6,7 @@ import { db } from "../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import bcrypt from "bcryptjs";
 import { useUser } from "../context/userContext";
+import { setCookie } from "cookies-next";
 
 const SignIn = () => {
   const [username, setUsername] = useState("");
@@ -16,34 +17,28 @@ const SignIn = () => {
 
   const handleSignIn = async () => {
     try {
-      try {
-        const snapshot = await getDocs(collection(db, "users"));
-        snapshot.forEach((doc) => {
-          console.log(`${doc.id} =>`, doc.data());
-        });
-        console.log("Firestore is connected successfully.");
-      } catch (error) {
-        console.error("Error testing Firestore connection:", error);
-      }
-      // Query Firestore for the username
       const q = query(collection(db, "users"), where("username", "==", username));
-      console.log(q)
       const querySnapshot = await getDocs(q);
-
+  
       if (!querySnapshot.empty) {
         const userDoc = querySnapshot.docs[0];
         const userData = userDoc.data();
-
-        // Compare the hashed password with the entered password
+  
         const isPasswordValid = await bcrypt.compare(password, userData.Password);
-
+  
         if (isPasswordValid) {
           setUser({
             id: userDoc.id,
             username: userData.username,
             email: userData.email || "",
           });
-          router.push("/"); // Redirect to home page after login
+  
+          // Set a cookie for the logged-in user
+          setCookie("user", JSON.stringify({ id: userDoc.id, username: userData.username }), {
+            maxAge: 24 * 60 * 60, // 1 day
+          });
+  
+          router.push("/profile"); // Redirect to profile page after login
         } else {
           setError("Invalid username or password.");
         }

@@ -1,3 +1,5 @@
+"use client"; // Add this directive to make the file a client component
+
 import { UserProvider } from "./context/userContext";
 import "./globals.css";
 
@@ -13,15 +15,7 @@ export default function RootLayout({ children }) {
       </head>
       <body style={{ fontFamily: "Raleway, sans-serif" }}>
         <UserProvider>
-          {/* <nav style={{position: "absolute", right: 10, top: 10, fontSize: "20px"}}>
-            <a href="/">Home</a>
-            <a href="/profile">Profile</a>
-            <a href="/chatbot">AI Coach</a>
-          </nav> */}
           <main>{children}</main>
-          {/* <footer>
-            <p>© 2024 Athlete Dashboard</p>
-          </footer> */}
         </UserProvider>
       </body>
     </html>
