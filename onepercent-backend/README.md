@@ -24,12 +24,16 @@ A robust FastAPI-based backend service for the OnePercent application, providing
 ## 📁 Project Structure
 
 ```
-app/
-├── routers/         # API route definitions
-├── services/        # Business logic implementation
-├── models/          # Data models and schemas
-└── ml/
-    └── models/      # Machine learning model inference
+├── app/
+│   ├── routers/         # API route definitions
+│   ├── services/        # Business logic implementation
+│   ├── models/          # Data models and schemas
+│   └── certs/           # Firebase certificates
+├── ml/
+│   └── model/          # Machine learning model files
+├── requirements.txt
+├── Dockerfile
+└── docker-compose.yml
 ```
 
 ## 🔧 Setup and Installation
@@ -40,17 +44,55 @@ git clone https://github.com/yourusername/onepercent-backend.git
 cd onepercent-backend
 ```
 
-2. Create and configure `.env` file
-```env
-FIREBASE_CONFIG=your_config
-OPENAI_API_KEY=your_key
-# Add other required environment variables
+2. Set up environment variables
+```bash
+# Copy the example env file
+cp .env.example .env
+
+# Edit .env with your configurations
+nano .env
 ```
 
-3. Build and run with Docker
+Required environment variables:
+```env
+# App Configuration
+SECRET_KEY=your_secret_key
+DEBUG=True
+MODEL_PATH=./ml/model/
+MODEL_NAME=model.pkl
+
+# OpenAI Configuration
+OPENAI_API_KEY=your_openai_key
+
+# Firebase Client Configuration
+NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_domain.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+
+# Firebase Admin Configuration
+FIREBASE_PRIVATE_KEY=your_private_key
+FIREBASE_CLIENT_EMAIL=your_client_email
+FIREBASE_PROJECT_ID=your_project_id
+CREDS_PATH=app/certs/your-firebase-adminsdk.json
+```
+
+3. Running with Docker
+
+Using Docker Compose (recommended):
 ```bash
+docker-compose up --build
+```
+
+Using Docker directly:
+```bash
+# Build the image
 docker build -t onepercent-backend .
-docker run -p 8000:8000 onepercent-backend
+
+# Run with environment variables
+docker run --env-file ./.env -p 8000:8000 onepercent-backend
 ```
 
 ## 🔒 Authentication
@@ -68,6 +110,22 @@ Key endpoints include:
 - `/start` - Initialize chatbot sessions
 - `/generate-meal-plan` - AI-powered meal planning
 - `/ml/marathon/predict` - Marathon time predictions
+
+## 🚀 Deployment
+
+For production deployment:
+1. Ensure all environment variables are properly set in your deployment platform
+2. Never commit .env files to version control
+3. Use appropriate secrets management for production environments
+4. Store Firebase credentials securely
+5. Consider using container orchestration services like Kubernetes or AWS ECS
+
+## ⚠️ Important Notes
+
+- Keep your Firebase private key and OpenAI API key secure
+- The `app/certs` directory should contain your Firebase admin SDK JSON file
+- ML models should be placed in the `ml/model` directory
+- Environment variables marked as `NEXT_PUBLIC` are for client-side Firebase configuration
 
 ## 🤝 Contributing
 
