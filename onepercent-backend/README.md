@@ -1,133 +1,82 @@
-# onepercent-backend
+# OnePercent Backend
 
-One Percent Athlete
+A robust FastAPI-based backend service for the OnePercent application, providing APIs for fitness tracking, nutrition planning, and personalized coaching through AI-powered features.
 
-## Development Requirements
+## 🚀 Features
 
-- Python3.11.0
-- Pip
-- Poetry (Python Package Manager)
+- User Profile Management
+- Multi-mode Chatbot System (Nutrition, Fitness, General)
+- AI-Powered Meal Planning
+- Machine Learning Services
+  - OpenPose Estimation for AI Fitness Tracking
+  - Marathon Time Prediction
+- Firebase Integration for Authentication and Storage
+- JWT-based Security
 
-### M.L Model Environment
+## 🛠️ Technology Stack
 
-```sh
-MODEL_PATH=./ml/model/
-MODEL_NAME=model.pkl
+- Python
+- FastAPI
+- Firebase (Authentication & Storage)
+- Machine Learning Models
+- Docker
+
+## 📁 Project Structure
+
+```
+app/
+├── routers/         # API route definitions
+├── services/        # Business logic implementation
+├── models/          # Data models and schemas
+└── ml/
+    └── models/      # Machine learning model inference
 ```
 
-### Update `/predict`
+## 🔧 Setup and Installation
 
-To update your machine learning model, add your `load` and `method` [change here](app/api/routes/predictor.py#L19) at `predictor.py`
-
-## Installation
-
-```sh
-python -m venv venv
-source venv/bin/activate
-make install
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/onepercent-backend.git
+cd onepercent-backend
 ```
 
-## Runnning Localhost
+2. Create and configure `.env` file
+```env
+FIREBASE_CONFIG=your_config
+OPENAI_API_KEY=your_key
+# Add other required environment variables
+```
 
-`make run`
+3. Build and run with Docker
+```bash
+docker build -t onepercent-backend .
+docker run -p 8000:8000 onepercent-backend
+```
 
-## Deploy app
+## 🔒 Authentication
 
-`make deploy`
+The API uses JWT token-based authentication in conjunction with Firebase. All protected endpoints require a valid Bearer token.
 
-## Running Tests
+## 📚 API Documentation
 
-`make test`
+Once the server is running, visit:
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`
 
-## Access Swagger Documentation
+Key endpoints include:
+- `/profile` - User profile management
+- `/start` - Initialize chatbot sessions
+- `/generate-meal-plan` - AI-powered meal planning
+- `/ml/marathon/predict` - Marathon time predictions
 
-> <http://localhost:8080/docs>
+## 🤝 Contributing
 
-## Access Redocs Documentation
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-> <http://localhost:8080/redoc>
+## 📝 License
 
-## Project structure
-
-Files related to application are in the `app` or `tests` directories.
-Application parts are:
-
-    app
-    |
-    | # Fast-API stuff
-    ├── api                 - web related stuff.
-    │   └── routes          - web routes.
-    ├── core                - application configuration, startup events, logging.
-    ├── models              - pydantic models for this application.
-    ├── services            - logic that is not just crud related.
-    ├── main-aws-lambda.py  - [Optional] FastAPI application for AWS Lambda creation and configuration.
-    └── main.py             - FastAPI application creation and configuration.
-    |
-    | # ML stuff
-    ├── data             - where you persist data locally
-    │   ├── interim      - intermediate data that has been transformed.
-    │   ├── processed    - the final, canonical data sets for modeling.
-    │   └── raw          - the original, immutable data dump.
-    │
-    ├── notebooks        - Jupyter notebooks. Naming convention is a number (for ordering),
-    |
-    ├── ml               - modelling source code for use in this project.
-    │   ├── __init__.py  - makes ml a Python module
-    │   ├── pipeline.py  - scripts to orchestrate the whole pipeline
-    │   │
-    │   ├── data         - scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features     - scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   └── model        - scripts to train models and make predictions
-    │       ├── predict_model.py
-    │       └── train_model.py
-    │
-    └── tests            - pytest
-
-## GCP
-
-Deploying inference service to Cloud Run
-
-### Authenticate
-
-1. Install `gcloud` cli
-2. `gcloud auth login`
-3. `gcloud config set project <PROJECT_ID>`
-
-### Enable APIs
-
-1. Cloud Run API
-2. Cloud Build API
-3. IAM API
-
-### Deploy to Cloud Run
-
-1. Run `gcp-deploy.sh`
-
-### Clean up
-
-1. Delete Cloud Run
-2. Delete Docker image in GCR
-
-## AWS
-
-Deploying inference service to AWS Lambda
-
-### Authenticate
-
-1. Install `awscli` and `sam-cli`
-2. `aws configure`
-
-### Deploy to Lambda
-
-1. Run `sam build`
-2. Run `sam deploy --guiChange this portion for other types of models
-
-## Add the correct type hinting when completed
-
-`aws cloudformation delete-stack --stack-name <STACK_NAME_ON_CREATION>`
-
-Made by <https://github.com/arthurhenrique/cookiecutter-fastapi/graphs/contributors> with ❤️
+[MIT License](LICENSE)
