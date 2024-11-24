@@ -89,9 +89,7 @@ def get_application() -> FastAPI:
         debug=False,  # Set debug to False to reduce logging
         version=VERSION,
         # Disable docs in production
-        openapi_url="/api/v1/openapi.json" if DEBUG else None,
-        docs_url="/api/v1/docs" if DEBUG else None,
-        redoc_url="/api/v1/redoc" if DEBUG else None,
+
     )
 
     
