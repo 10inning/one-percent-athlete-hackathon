@@ -4,6 +4,8 @@ from fastapi import FastAPI
 import os
 from app.utils.load_env import load_env_vars
 from app.core.firebase_config import initialize_firebase
+from fastapi.middleware.cors import CORSMiddleware
+
 
 # Configure logging before any other imports
 def setup_logging():
@@ -108,6 +110,16 @@ def get_application() -> FastAPI:
 
 # Create the application instance
 app = get_application()
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Replace "*" with specific origins if needed
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods (GET, POST, OPTIONS, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
+
 
 # Optional: Add middleware to suppress specific headers or response logging
 @app.middleware("http")

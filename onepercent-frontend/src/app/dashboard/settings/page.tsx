@@ -42,8 +42,7 @@ const LOCALE_STORAGE_KEY = 'userProfile';
 
 const DEFAULT_BADGES = [
   '/images/badges/badge1.png',
-  '/images/badges/badge2.png',
-  '/images/badges/badge3.png',
+
 ];
 
 const DEFAULT_TOURNAMENTS = [
@@ -189,7 +188,7 @@ export default function SettingsPage() {
         {/* Profile Picture */}
         <div className="flex flex-col items-center mb-6">
           <img
-            src={user.profilePicture || '/images/default-profile.png'}
+            src={user.profilePicture || 'https://static.vecteezy.com/system/resources/thumbnails/029/872/599/small/illustration-of-people-running-in-solid-color-use-for-exercising-of-athletics-logo-vector.jpg'}
             alt="Profile"
             className="w-32 h-32 rounded-full object-cover mb-4"
           />
@@ -200,15 +199,15 @@ export default function SettingsPage() {
         {/* Badges */}
         <div className="mb-6">
           <h3 className="text-lg font-medium text-gray-700 mb-2 flex items-center">
-            <FaMedal className="mr-2 text-yellow-500" /> Earned Badges
+            <FaMedal className="mr-2 text-yellow-500" /> Earned Medals
           </h3>
           <div className="flex flex-wrap justify-center md:justify-start">
             {badges.map((badge, index) => (
               <img
                 key={index}
-                src={badge}
+                src="https://i.ibb.co/9tMb9RJ/sm.png"
                 alt={`Badge ${index + 1}`}
-                className="w-16 h-16 m-2"
+                className="w-6 h-8 m-2"
               />
             ))}
           </div>
@@ -263,7 +262,7 @@ export default function SettingsPage() {
         <div className="max-w-4xl mx-auto bg-white shadow-md rounded-md p-8">
           <h1 className="text-3xl font-semibold mb-6 text-gray-800 flex items-center">
             <FaUser className="mr-2 text-blue-600" />
-            Update Your Profile
+            Personalise
           </h1>
           <form onSubmit={handleSubmit}>
             {/* Personal Information */}

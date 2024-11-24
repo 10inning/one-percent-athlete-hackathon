@@ -5,7 +5,6 @@ import { auth } from '@/lib/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useAuth } from '@/store/userAuth';
 import { AtSign, KeyRound, Loader2, Github, Chrome } from 'lucide-react';
-import Image from 'next/image';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -40,10 +39,7 @@ export default function LoginForm() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
       <div className="absolute top-0 left-0 right-0 h-16 bg-white/50 backdrop-blur-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
-          <div className="text-2xl font-bold text-gray-800">OnePercentHack</div>
-          <a href="#" className="text-sm text-gray-600 hover:text-gray-900">Need help?</a>
-        </div>
+       
       </div>
 
       <div className="flex min-h-screen">
@@ -78,7 +74,7 @@ export default function LoginForm() {
                       onChange={(e) => setEmail(e.target.value)}
                       className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl 
                                focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                               bg-white/50 backdrop-blur-sm transition duration-200
+                               bg-white/50  transition duration-200
                                placeholder-gray-400 text-gray-900"
                       placeholder="Enter your email"
                     />
@@ -100,7 +96,7 @@ export default function LoginForm() {
                       onChange={(e) => setPassword(e.target.value)}
                       className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl 
                                focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                               bg-white/50 backdrop-blur-sm transition duration-200
+                               bg-white/50 transition duration-200
                                placeholder-gray-400 text-gray-900"
                       placeholder="Enter your password"
                     />
@@ -184,19 +180,38 @@ export default function LoginForm() {
 
         {/* Right Side - Background Image/Pattern */}
         <div className="hidden lg:block lg:w-[55%] bg-gradient-to-br from-indigo-500 to-blue-600 relative overflow-hidden">
-          <div className="absolute inset-0 bg-grid-white/[0.2] bg-[length:16px_16px]" />
-          <div className="absolute h-full w-full flex items-center justify-center p-8">
-            <div className="max-w-md text-center">
-              <div className="text-white text-3xl font-bold mb-4">
-                Welcome to OnePercentHack
-              </div>
-              <p className="text-indigo-100">
-                Your one-stop solution for all your development needs. Join our community of developers and start building amazing projects today.
-              </p>
-            </div>
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-indigo-600/50 to-blue-600/30" />
-        </div>
+
+
+
+  <div className="absolute inset-0 bg-grid-white/[0.2] bg-[length:16px_16px]" />
+  <div className="absolute h-full w-full flex items-center justify-center p-8">
+    <div className="max-w-md text-center">
+
+
+    <div className="relative z-50 text-white text-4xl font-bold mb-4 tracking-wider">
+  Welcome to <span className="text-yellow-400">One Percent Athlete</span>
+</div>
+<p className="relative z-50 text-red-100 text-lg italic mb-6">
+  "Unlock your potential and push beyond your limits. It's not just a brand; it's a mindset."
+</p>
+
+
+
+
+    </div>
+  </div>
+  {/* Overlay for enhanced visuals */}
+  <div className="absolute inset-0 bg-gradient-to-t from-indigo-600/50 to-blue-600/30" />
+  {/* Add decorative athletic visual elements */}
+  <div className="absolute bottom-20 left-0 w-full flex justify-center">
+    <img
+      src="https://i.ibb.co/YQFXL71/logo.png"
+      alt="Athlete Silhouette"
+      className="h-90 w-auto opacity-15"
+    />
+  </div>
+</div>
+
       </div>
     </div>
   );

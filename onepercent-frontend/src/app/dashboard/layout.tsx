@@ -39,9 +39,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Welcome Section */}
           <div>
             <h2 className="text-xl font-semibold text-gray-900">
-              {user?.displayName ? `Hello, ${user.displayName.split(' ')[0]}` : 'Hello, Athlete'}
+              {user?.displayName ? `Hello, ${user.displayName.split(' ')[0]}` : 'Hello, Hoyath'}
             </h2>
-            <p className="text-sm text-gray-600">AI-Powered Performance Edge</p>
+            <p className="text-sm text-gray-600">Athlete</p>
           </div>
         </div>
 
@@ -96,17 +96,32 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
         {/* Banner */}
-        <header className="bg-white text-gray-900 text-center py-6 shadow-sm">
-  <div className="max-w-screen-lg mx-auto">
-    <h1 className="text-4xl font-semibold tracking-tight">Athlete Edge</h1>
-    <p className="mt-1 text-base text-gray-500">Empowering Performance with AI</p>
+        <header className="bg-white text-gray-900 py-2 shadow-md relative overflow-hidden">
+  <div className="max-w-screen-lg mx-auto text-center">
+    {/* Title with Animation */}
+    <h1 className="text-3xl font-extrabold tracking-wide relative z-10 animate-fade-in">
+    ↿ Percent Athlete
+    </h1>
+    {/* Subheading with Subtle Motion */}
+    <p className="mt-2 text-lg text-gray-500 relative z-10 animate-slide-in">
+      "Unleash Your Potential with Every Step."
+    </p>
+    {/* User Info */}
     {user?.displayName && (
-      <p className="mt-4 text-sm text-gray-400">
+      <p className="mt-6 text-sm text-gray-400 relative z-10">
         Logged in as <strong className="text-gray-600">{user.displayName}</strong>
       </p>
     )}
   </div>
+
+  {/* Animated Decorative Elements */}
+  <div className="absolute inset-0 z-0">
+    <div className="w-32 h-32 bg-blue-100 rounded-full blur-xl opacity-50 absolute top-10 left-20 animate-bounce-slow"></div>
+    <div className="w-40 h-40 bg-purple-100 rounded-full blur-2xl opacity-50 absolute bottom-10 right-20 animate-bounce-slow delay-100"></div>
+  </div>
 </header>
+
+
 
 
         {/* Content */}
