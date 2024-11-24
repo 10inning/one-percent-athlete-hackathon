@@ -1,88 +1,173 @@
-# one-percent-athlete-hackathon
-Official repository for The One Percent Athlete Hackathon hosted by 10th Inning Ventures.
+# One Percent Athlete 🏃‍♂️
 
-### The One Percent Athlete Hackathon
-Hosted by 10th Inning Ventures
+An AI-powered fitness platform that helps athletes optimize their performance through personalized meal planning, workout analysis, and intelligent coaching. Built with Next.js frontend and FastAPI backend.
 
-# The One Percent Athlete Hackathon  
-Hosted by **10th Inning Ventures**  
+## Project Overview 🌟
 
-Welcome to the official repository for **The One Percent Athlete Hackathon**! This is your central hub for submitting your project, accessing resources, and collaborating with your team.
+One Percent Athlete is a comprehensive fitness platform that leverages artificial intelligence to provide personalized fitness solutions. The project combines advanced ML models with intuitive user interfaces to deliver a seamless fitness experience.
+
+## Team 👥
+
+**Solo Developer**: Hoyath
+- Full Stack Development
+- ML Model Implementation
+- UI/UX Design
+- DevOps & Deployment
+
+### Key Features
+
+- **Personalized Meal Planning**
+  - AI-generated meal plans based on user profiles
+  - Dietary restrictions and preferences handling
+  - Multiple plan management
+
+- **Marathon Performance Prediction**
+  - ML-powered runtime predictions
+  - Performance trend visualization
+  - Historical analysis
+
+- **AI Workout Analysis**
+  - Real-time posture correction
+  - Video analysis for form improvement
+  - Automated rep counting
+  - Injury prevention insights
+
+- **Intelligent Chatbots**
+  - Specialized AI assistants for different domains
+  - Context-aware recommendations
+  - Personalized coaching
+
+## Tech Stack 💻
+
+### Frontend
+- Next.js
+- TypeScript
+- Tailwind CSS
+- TensorFlow.js
+- Firebase Authentication
+
+### Backend
+- FastAPI (Python)
+- Machine Learning Models
+- Firebase Admin SDK
+- Docker
+- JWT Authentication
+
+### Third-Party Services
+- OpenAI API
+- Firebase (Auth & Storage)
+- TensorFlow
+
+## Project Structure 📁
+```
+onepercent-athlete/
+├──onepercent-frontend/   # Next.js frontend application
+│   ├── src/              # souce code
+│     ├── app/           
+│       ├── chat/          
+│       ├── Dashboard/       
+│       ├── Components/
+│       └── ...    
+│   ├── public/           # Static assets
+│   └── ...
+├──onepercent-backend/    # FastAPI backend service
+│   ├── app/              # Main application code
+│   ├── ml/               # Machine learning models
+│   └── ...
+└── README.md             # Main documentation
+```
+
+## Prerequisites 📋
+
+- Node.js (v18 or higher)
+- Python 3.8+
+- Docker and Docker Compose
+- Git
+
+## Installation & Setup 🛠️
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/one-percent-athlete-hackathon.git
+cd one-percent-athlete-hackathon
+```
+
+2. Set up frontend:
+```bash
+cd frontend
+npm install
+```
+
+3. Set up backend:
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+4. Environment Configuration:
+
+Create `.env.local` in the frontend directory and `.env` in the backend directory. Required variables:
+
+```env
+# Frontend (.env.local)
+NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_firebase_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+OPENAI_API_KEY=your_openai_api_key
+
+# Backend (.env)
+OPENAI_API_KEY=your_openai_key
+FIREBASE_PRIVATE_KEY=your_private_key
+FIREBASE_CLIENT_EMAIL=your_client_email
+FIREBASE_PROJECT_ID=your_project_id
+CREDS_PATH=app/certs/your-firebase-adminsdk.json
+```
+
+## Running the Application 🚀
+
+### Development Mode
+
+1. Frontend:
+```bash
+cd frontend
+npm run dev
+```
+
+2. Backend:
+```bash
+cd backend
+docker-compose up --build
+```
+
+Visit: 
+- Frontend: http://localhost:3000
+- Backend API docs: http://localhost:8000/docs
+
+### Production Mode
+
+1. Frontend:
+```bash
+cd frontend
+npm run build
+npm start
+```
+
+2. Backend:
+```bash
+cd backend
+docker-compose -f docker-compose.prod.yml up --build
+```
+
+
+## License 📄
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ---
 
-## 📖 Overview  
-
-The One Percent Athlete Hackathon is a 3-day remote event where talented engineers and designers build innovative solutions to empower athletes. Your challenge is to create functional, impactful, and scalable solutions aligned with our mission of developing holistic athletes.  
-
----
-
-## 🚀 Getting Started  
-
-### 1. **Fork This Repository**
-- Click the **"Fork"** button in the top-right corner of this page to create a copy of this repository under your GitHub account.
-
-### 2. **Clone Your Forked Repository**
-- Copy the HTTPS or SSH URL from your forked repository and clone it to your local machine:
-  ```bash
-  git clone <your-forked-repo-url>
-  cd one-percent-athlete-hackathon
-### 3. Start Building Your Solution
-Add your project files (code, assets, documentation, etc.) to the repository.
-Ensure your project is organized and follows the required submission structure:
-
-bash
-Copy code
-├── README.md        # Project overview and instructions
-├── /src             # Source code
-├── /assets          # Images, icons, or other media
-└── /docs            # Additional documentation (optional)
-
-### 4. Commit and Push Your Work
-After developing your solution, commit and push your changes to your forked repository:
-bash
-Copy code
-git add .
-git commit -m "Initial commit with project files"
-git push origin main
-
-### 5. Submit a Pull Request
-Go to this original repository (10th Inning Hackathon Repo) and click the "Pull Requests" tab.
-Click "New Pull Request" and follow the prompts to submit your work.
-Include the following in your pull request:
-Project Name
-Team Members
-Challenge Addressed
-Brief Description of Your Solution
-🛠 Submission Requirements
-
-### Checklist:
-Code Repository: Ensure your code is functional and well-documented.
-README File: Include the following:
-Project name and description.
-Team members and their roles.
-Instructions for running the code locally.
-Any dependencies or setup steps.
-
-### Optional Deliverables:
-Demo video link (e.g., YouTube or Vimeo).
-Additional documentation or slides (if applicable).
-Submission Deadline:
-Sunday, November 24, 2024, at 2:00 PM EST.
-
-🏆 Prizes
-🥇 Winning Team: $2,000
-🥈 Runner-Up Team: $800
-🥉 Third Place Team: $200
-Winners will be announced during the Closing Ceremony on Sunday at 6:00 PM EST.
-
-💬 Support
-Need Help?
-Post your questions in the #help-desk channel on Slack.
-Reach out to mentors in the #mentors channel for technical or design advice.
-
-📄 License
-By submitting your project, you agree that your code and solution become the property of 10th Inning Ventures under the terms outlined in the Hackathon Participation Agreement.
-
-Good luck, and we can’t wait to see your innovative solutions! 🎉
-
+Made with ❤️ by Hoyath
