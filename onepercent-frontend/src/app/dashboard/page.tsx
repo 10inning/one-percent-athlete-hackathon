@@ -4,6 +4,7 @@ import { Activity, TrendingUp, Award, Calendar } from 'lucide-react';
 import NutritionPlan from '@/components/layout/Nutrition';
 import { motion } from 'framer-motion';
 import VideoUpload from '@/components/layout/VideoUpload';
+import AIWorkoutContainer from '@/components/layout/AIWorkoutContainer';
 
 const newsData = [
   {
@@ -125,15 +126,11 @@ export default function DashboardPage() {
       </div>
 
       {/* Third Row: Analyze Your Form */}
-      <div className="col-span-12 bg-gray-100 rounded-lg shadow-lg p-8 text-center space-y-6">
-        <h2 className="text-2xl font-semibold">Analyze Your Form</h2>
-        <p className="text-sm text-gray-600">
-          Upload your workout video to receive actionable insights and tips for improvement.
-        </p>
-        <div className="flex justify-center">
-          <VideoUpload />
-        </div>
-      </div>
+      <div className="col-span-12">
+      <AIWorkoutContainer>
+  <VideoUpload />
+</AIWorkoutContainer>
+    </div>
     </div>
   );
 }

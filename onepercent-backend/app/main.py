@@ -70,7 +70,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CREDS_PATH = os.getenv("CREDS_PATH")
 
 # Initialize Firebase with logging suppressed
-initialize_firebase(CREDS_PATH)
+initialize_firebase()
 
 # Import routes
 from app.api.routes.api import router as router
@@ -91,7 +91,7 @@ def get_application() -> FastAPI:
         docs_url="/api/v1/docs" if DEBUG else None,
         redoc_url="/api/v1/redoc" if DEBUG else None,
     )
-    
+
     
     # Include routers
     application.include_router(router, prefix=API_PREFIX)

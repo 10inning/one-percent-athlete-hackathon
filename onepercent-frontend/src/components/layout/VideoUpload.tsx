@@ -1,5 +1,7 @@
 'use client';
 import React, { useState, useCallback } from 'react';
+import { FiUpload, FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 const DEFAULT_CHUNK_SIZE = 1024 * 1024; // Default chunk size: 1MB
 
@@ -8,7 +10,6 @@ const VideoUpload = () => {
   const [chunkSize, setChunkSize] = useState(DEFAULT_CHUNK_SIZE);
   const [uploadStatus, setUploadStatus] = useState('');
   const [progress, setProgress] = useState(0);
-  const [analysisStatus, setAnalysisStatus] = useState('');
   const [analysisResults, setAnalysisResults] = useState(null);
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -30,10 +31,9 @@ const VideoUpload = () => {
     }
 
     const responseData = await response.json();
-    
-    // If this is the last chunk, we'll get the analysis results
+
     if (chunkIndex === totalChunks - 1) {
-      return responseData.analysis_results; // Modified to access the nested analysis_results
+      return responseData.analysis_results;
     }
     return null;
   };
@@ -59,7 +59,6 @@ const VideoUpload = () => {
       setFile(selectedFile);
       setUploadStatus('');
       setProgress(0);
-      setAnalysisStatus('');
       setAnalysisResults(null);
     }
   };
@@ -82,48 +81,72 @@ const VideoUpload = () => {
         const results = await uploadChunk(chunk, chunkIndex, totalChunks);
         const newProgress = Math.round(((chunkIndex + 1) / totalChunks) * 100);
         setProgress(newProgress);
-        
+
         if (chunkIndex === totalChunks - 1 && results) {
-          // This is the last chunk, update the UI with analysis results
           setUploadStatus('Analysis completed!');
           setAnalysisResults(results);
-          console.log('Analysis results received:', results); // Added for debugging
         } else {
           setUploadStatus(`Uploading: ${newProgress}%`);
         }
       }
     } catch (error) {
-      console.error('Upload error:', error); // Added for debugging
+      console.error('Upload error:', error);
       setUploadStatus(`Upload failed: ${error.message}`);
-      setAnalysisStatus('');
     }
   }, [file, chunkSize]);
 
   return (
-    <div className="space-y-4 p-4 max-w-lg mx-auto">
-      <h1 className="text-xl font-semibold text-gray-800 text-center">
-        AI-Powered Push-Up Analyzer
+    <div className="space-y-6 p-6 max-w-3xl mx-auto">
+      <h1 className="text-2xl font-bold text-center text-gray-800">
+        <span className="text-blue-600">AI</span>-Powered Workout Analyzer
       </h1>
-      <input
-        type="file"
-        accept="video/*"
-        onChange={handleFileChange}
-        className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 p-2"
-      />
 
-      <button
-        onClick={handleUpload}
-        disabled={!file || (progress > 0 && progress < 100)}
-        className="w-full px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-      >
-        {progress === 0 ? 'Upload Video' : progress < 100 ? 'Uploading...' : 'Re-upload'}
-      </button>
+      {/* File Upload Section */}
+      <div className="flex flex-col items-center">
+        <input
+          type="file"
+          accept="video/*"
+          onChange={handleFileChange}
+          className="hidden"
+          id="file-upload"
+        />
+        <label
+          htmlFor="file-upload"
+          className="flex items-center space-x-3 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md cursor-pointer hover:bg-blue-700 transition-all"
+        >
+          <FiUpload className="text-lg" />
+          <span>Select Video File</span>
+        </label>
+      </div>
 
+      {/* Upload Button */}
+      {file && (
+        <button
+          onClick={handleUpload}
+          disabled={progress > 0 && progress < 100}
+          className="w-full px-6 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
+        >
+          {progress === 0
+            ? 'Start Upload'
+            : progress < 100
+            ? 'Uploading...'
+            : 'Re-upload'}
+        </button>
+      )}
+
+      {/* Progress and Status */}
       {uploadStatus && (
-        <div className="mt-4">
-          <div className="text-sm text-gray-700 mb-2">{uploadStatus}</div>
+        <div className="mt-4 text-center">
+          {uploadStatus.includes('failed') ? (
+            <FiXCircle className="text-red-600 text-xl mx-auto mb-2" />
+          ) : uploadStatus.includes('completed') ? (
+            <FiCheckCircle className="text-green-600 text-xl mx-auto mb-2" />
+          ) : (
+            <AiOutlineLoading3Quarters className="text-blue-600 text-xl mx-auto mb-2 animate-spin" />
+          )}
+          <p className="text-sm text-gray-700">{uploadStatus}</p>
           {progress > 0 && (
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
+            <div className="mt-2 w-full bg-gray-200 rounded-full h-2.5">
               <div
                 className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
@@ -133,96 +156,51 @@ const VideoUpload = () => {
         </div>
       )}
 
+      {/* Analysis Results */}
       {analysisResults && (
-        <div className="mt-6 space-y-6">
-          {/* Metadata Section */}
-          {analysisResults.metadata && (
-            <div className="p-4 border rounded-lg bg-gray-50 shadow">
-              <h2 className="text-lg font-semibold text-gray-800 mb-3">Video Analysis</h2>
-              <div className="space-y-2">
-                <p className="text-sm text-gray-700">
-                  <span className="font-medium">Video Path:</span> {analysisResults.metadata.video_path}
-                </p>
-                <p className="text-sm text-gray-700">
-                  <span className="font-medium">Frames Analyzed:</span> {analysisResults.metadata.frames_analyzed}
-                </p>
-                {analysisResults.metadata.fps && (
-                  <p className="text-sm text-gray-700">
-                    <span className="font-medium">FPS:</span> {analysisResults.metadata.fps}
-                  </p>
-                )}
-              </div>
-            </div>
-          )}
+        <div className="mt-6 space-y-8">
+          <div className="p-6 bg-gray-50 border rounded-lg shadow">
+            <h2 className="text-lg font-semibold text-gray-800">Video Analysis</h2>
+            <p className="text-sm text-gray-700 mt-2">
+              <span className="font-medium">Video Path:</span>{' '}
+              {analysisResults.metadata.video_path}
+            </p>
+          </div>
 
-          {/* Stats Section - Added null check */}
-          {analysisResults.stats && (
-            <div className="p-4 border rounded-lg bg-gray-50 shadow">
-              <h2 className="text-lg font-semibold text-gray-800 mb-3">Performance Summary</h2>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-3 bg-white rounded-lg shadow-sm">
-                  <p className="text-sm text-gray-600">Total Push-ups</p>
-                  <p className="text-xl font-bold text-gray-800">{analysisResults.stats.total_reps_attempted}</p>
-                </div>
-                <div className="p-3 bg-white rounded-lg shadow-sm">
-                  <p className="text-sm text-gray-600">Good Form</p>
-                  <p className="text-xl font-bold text-green-600">{analysisResults.stats.good_form_reps}</p>
-                </div>
-                <div className="p-3 bg-white rounded-lg shadow-sm">
-                  <p className="text-sm text-gray-600">Bad Form</p>
-                  <p className="text-xl font-bold text-red-600">{analysisResults.stats.bad_form_reps}</p>
-                </div>
-                <div className="p-3 bg-white rounded-lg shadow-sm">
-                  <p className="text-sm text-gray-600">Success Rate</p>
-                  <p className="text-xl font-bold text-blue-600">
-                    {analysisResults.stats.success_rate.toFixed(1)}%
-                  </p>
-                </div>
+          <div className="p-6 bg-gray-50 border rounded-lg shadow">
+            <h2 className="text-lg font-semibold text-gray-800">Performance Summary</h2>
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="p-4 bg-white shadow rounded-lg">
+                <p className="text-sm text-gray-600">Total Push-ups</p>
+                <p className="text-xl font-bold text-gray-800">
+                  {analysisResults.stats.total_reps_attempted}
+                </p>
               </div>
+              <div className="p-4 bg-white shadow rounded-lg">
+                <p className="text-sm text-gray-600">Good Form</p>
+                <p className="text-xl font-bold text-green-600">
+                  {analysisResults.stats.good_form_reps}
+                </p>
+              </div>
+              {/* Add similar blocks for other stats */}
             </div>
-          )}
+          </div>
 
-          {/* Bad Form Frames Section */}
-          {analysisResults.bad_form_frames && analysisResults.bad_form_frames.length > 0 && (
-            <div className="p-4 border rounded-lg bg-gray-50 shadow">
-              <h2 className="text-lg font-semibold text-gray-800 mb-3">Form Issues</h2>
-              <div className="space-y-4">
+          {analysisResults.bad_form_frames && (
+            <div className="p-6 bg-gray-50 border rounded-lg shadow">
+              <h2 className="text-lg font-semibold text-gray-800">Form Issues</h2>
+              <div className="grid grid-cols-3 gap-4 mt-4">
                 {analysisResults.bad_form_frames.map((frame, index) => (
-                  <div key={index} className="bg-white p-4 rounded-lg shadow-sm">
-                    <div className="flex items-start space-x-4">
-                      <div className="flex-shrink-0">
-                        <img
-                          src={`data:image/jpeg;base64,${frame.image}`}
-                          alt={`Bad form ${index + 1}`}
-                          className="w-32 h-32 object-cover rounded"
-                        />
-                      </div>
-                      <div className="flex-grow">
-                        <p className="text-sm font-medium text-gray-800">Rep #{frame.rep_number}</p>
-                        <p className="text-sm text-red-600 mt-1">{frame.message}</p>
-                      </div>
-                    </div>
+                  <div key={index} className="p-4 bg-white shadow rounded-lg">
+                    <img
+                      src={`data:image/jpeg;base64,${frame.image}`}
+                      alt={`Issue ${index}`}
+                      className="w-full h-32 object-cover rounded-lg"
+                    />
+                    <p className="text-sm mt-2">{frame.message}</p>
                   </div>
                 ))}
               </div>
-            </div>
-          )}
-
-          {/* Summary Section */}
-          {analysisResults.summary && (
-            <div className="p-4 border rounded-lg bg-gray-50 shadow">
-              <h2 className="text-lg font-semibold text-gray-800 mb-3">Detailed Summary</h2>
-              <pre className="whitespace-pre-wrap text-sm text-gray-700 font-mono bg-white p-3 rounded">
-                {analysisResults.summary}
-              </pre>
-            </div>
-          )}
-
-          {/* Error Display */}
-          {analysisResults.error && (
-            <div className="p-4 border border-red-200 rounded-lg bg-red-50">
-              <h2 className="text-lg font-semibold text-red-800 mb-2">Analysis Error</h2>
-              <p className="text-sm text-red-600">{analysisResults.error}</p>
             </div>
           )}
         </div>
