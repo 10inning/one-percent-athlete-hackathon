@@ -7,6 +7,8 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import bcrypt from "bcryptjs";
 import { useUser } from "../context/userContext";
 import { setCookie } from "cookies-next";
+import SignInModal from "../Components/signInModal";
+import "./signInPage.css";
 
 const SignIn = () => {
   const [username, setUsername] = useState("");
@@ -17,27 +19,37 @@ const SignIn = () => {
 
   const handleSignIn = async () => {
     try {
-      const q = query(collection(db, "users"), where("username", "==", username));
+      const q = query(
+        collection(db, "users"),
+        where("username", "==", username)
+      );
       const querySnapshot = await getDocs(q);
-  
+
       if (!querySnapshot.empty) {
         const userDoc = querySnapshot.docs[0];
         const userData = userDoc.data();
-  
-        const isPasswordValid = await bcrypt.compare(password, userData.Password);
-  
+
+        const isPasswordValid = await bcrypt.compare(
+          password,
+          userData.Password
+        );
+
         if (isPasswordValid) {
           setUser({
             id: userDoc.id,
             username: userData.username,
             email: userData.email || "",
           });
-  
+
           // Set a cookie for the logged-in user
-          setCookie("user", JSON.stringify({ id: userDoc.id, username: userData.username }), {
-            maxAge: 24 * 60 * 60, // 1 day
-          });
-  
+          setCookie(
+            "user",
+            JSON.stringify({ id: userDoc.id, username: userData.username }),
+            {
+              maxAge: 24 * 60 * 60, // 1 day
+            }
+          );
+
           router.push("/profile"); // Redirect to profile page after login
         } else {
           setError("Invalid username or password.");
@@ -52,22 +64,17 @@ const SignIn = () => {
   };
 
   return (
-    <div>
-      <h1>Sign In</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleSignIn}>Sign In</button>
+    <div className="signInPageContainer">
+      <div>
+        <SignInModal
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+          error={error}
+          handleSignIn={handleSignIn}
+        />
+      </div>
     </div>
   );
 };

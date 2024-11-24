@@ -102,7 +102,7 @@ const [jumpScoreLevel, setJumpScoreLevel] = useState("");
       }
     };
 
-    if (strengthScore) {
+    if (strengthScore && strengthScore != 0) {
       if (strengthScore > 2.75) {
         setStrengthScoreLevel("Div. I");
       } else if (strengthScore > 2.50) {
@@ -113,14 +113,14 @@ const [jumpScoreLevel, setJumpScoreLevel] = useState("");
         setStrengthScoreLevel("VAR");
       } else if (strengthScore > 1.75) {
         setStrengthScoreLevel("JV");
-      } else if (strengthScore > 1.50) {
-        setStrengthScoreLevel("Fr");
       } else {
-        setStrengthScoreLevel("N/A"); // Optional for scores less than or equal to 1.50
-      }
+        setStrengthScoreLevel("Fr");
+      } 
+    } else {
+      setStrengthScoreLevel("N/A");
     }
 
-    if (powerScore) {
+    if (powerScore && powerScore != 0) {
       if (powerScore > 41.47) {
         setPowerScoreLevel("Div. I");
       } else if (powerScore > 37.70) {
@@ -131,14 +131,14 @@ const [jumpScoreLevel, setJumpScoreLevel] = useState("");
         setPowerScoreLevel("VAR");
       } else if (powerScore > 22.62) {
         setPowerScoreLevel("JV");
-      } else if (powerScore > 15.08) {
-        setPowerScoreLevel("Fr.");
       } else {
-        setPowerScoreLevel("N/A");
+        setPowerScoreLevel("Fr.");
       }
+    } else {
+      setPowerScoreLevel("N/A");
     }
-    
-    if (jumpScore) {
+
+    if (jumpScore && jumpScore != 0) {
       if (jumpScore > 66.67) {
         setJumpScoreLevel("Div. I");
       } else if (jumpScore > 61.33) {
@@ -149,14 +149,14 @@ const [jumpScoreLevel, setJumpScoreLevel] = useState("");
         setJumpScoreLevel("VAR");
       } else if (jumpScore > 43.17) {
         setJumpScoreLevel("JV");
-      } else if (jumpScore > 36.67) {
-        setJumpScoreLevel("Fr.");
       } else {
-        setJumpScoreLevel("N/A");
+        setJumpScoreLevel("Fr.");
       }
+    } else {
+      setJumpScoreLevel("N/A");
     }
     
-    if (speedScore) {
+    if (speedScore && speedScore != 0) {
       if (speedScore > 19.42) {
         setSpeedScoreLevel("Div. I");
       } else if (speedScore > 18.29) {
@@ -167,11 +167,11 @@ const [jumpScoreLevel, setJumpScoreLevel] = useState("");
         setSpeedScoreLevel("VAR");
       } else if (speedScore > 15.92) {
         setSpeedScoreLevel("JV");
-      } else if (speedScore > 14.38) {
+      } else{
         setSpeedScoreLevel("Fr.");
-      } else {
-        setSpeedScoreLevel("N/A");
       }
+    } else {
+      setSpeedScoreLevel("N/A")
     }
     
     fetchUserData();
