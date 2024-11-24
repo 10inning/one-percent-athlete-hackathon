@@ -56,10 +56,6 @@ nano .env
 Required environment variables:
 ```env
 # App Configuration
-SECRET_KEY=your_secret_key
-DEBUG=True
-MODEL_PATH=./ml/model/
-MODEL_NAME=model.pkl
 
 # OpenAI Configuration
 OPENAI_API_KEY=your_openai_key
