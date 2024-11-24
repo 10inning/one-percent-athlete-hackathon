@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# One Percent Athlete 🏃‍♂️
 
-## Getting Started
+A Next.js powered AI fitness platform that helps athletes optimize their performance through personalized meal planning, workout analysis, and intelligent coaching.
 
-First, run the development server:
+## Features 🌟
 
+### Personalized Meal Planning
+- AI-powered meal plan generation based on your profile
+- Customization considering:
+  - Dietary restrictions
+  - Food preferences
+  - Allergies
+  - BMI and other health metrics
+- Save and manage multiple meal plans
+- Generate alternative plans on demand
+
+### Marathon Performance Prediction
+- ML-powered runtime prediction model
+- Visualization of performance trends
+- Data-driven insights for achieving target times
+- Historical performance analysis
+
+### AI Workout Analysis
+- Real-time posture correction
+- Video analysis for form improvement
+- Automatic rep counting (currently supports push-ups)
+- Injury prevention insights
+- Detailed feedback on form and technique
+
+### Intelligent Chatbots
+- Multiple specialized AI assistants:
+  - General fitness coach
+  - Nutrition specialist
+  - Workout advisor
+- Personalized responses based on user profile
+- Context-aware recommendations
+
+## Tech Stack 💻
+
+- Next.js
+- TypeScript
+- Firebase Authentication
+- TensorFlow.js (for ML models)
+- OpenAI API
+- Tailwind CSS
+
+## Prerequisites 📋
+
+Before you begin, ensure you have the following installed:
+- Node.js (v18 or higher)
+- npm or yarn
+- Git
+
+## Installation 🛠️
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/one-percent-athlete.git
+cd one-percent-athlete
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Set up environment variables:
+Create a `.env.local` file in the root directory and add the following:
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_firebase_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+OPENAI_API_KEY=your_openai_api_key
+```
 
-## Learn More
+4. Run the development server:
+```bash
+npm run dev
 
-To learn more about Next.js, take a look at the following resources:
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts 📜
 
-## Deploy on Vercel
+- `npm run dev` - Start development server
+- `npm run build` - Build production bundle
+- `npm start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run type-check` - Run TypeScript compiler check
+- `npm test` - Run tests
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure 📁
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+one-percent-athlete/
+├── components/            # Reusable UI components
+├── pages/                # Next.js pages
+├── public/              # Static assets
+├── styles/             # Global styles and Tailwind config
+├── lib/                # Utility functions and helpers
+├── models/             # ML models and types
+├── services/           # API and external service integrations
+├── hooks/              # Custom React hooks
+├── context/            # React context providers
+└── types/              # TypeScript type definitions
+```
+
+
+## License 📄
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+
+
+Made with ❤️ by the One Percent Athlete Team
