@@ -77,6 +77,7 @@ from app.api.routes.api import router as router
 from app.api.routes.user_routes import user_router
 from app.api.routes.nutrition_routes import nutrition_router  
 from app.api.routes.chat_routes import chat_router
+from app.api.routes.ml_routes import ml_router
 from app.core.events import create_start_app_handler
 from app.core.config import API_PREFIX, DEBUG, PROJECT_NAME, VERSION
 
@@ -91,12 +92,14 @@ def get_application() -> FastAPI:
         redoc_url="/api/v1/redoc" if DEBUG else None,
     )
     
+    
     # Include routers
     application.include_router(router, prefix=API_PREFIX)
     application.include_router(user_router)
     application.include_router(chat_router)
     application.include_router(nutrition_router)
-    
+    application.include_router(ml_router)
+
     pre_load = False
     if pre_load:
         application.add_event_handler("startup", create_start_app_handler(application))

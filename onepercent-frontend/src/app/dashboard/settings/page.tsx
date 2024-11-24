@@ -1,5 +1,3 @@
-// /app/dashboard/settings/page.tsx
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -19,6 +17,7 @@ import {
   FaCalendarAlt,
 } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 
 interface Tournament {
   id: number;
@@ -27,12 +26,42 @@ interface Tournament {
   result: string;
 }
 
+interface UserProfile {
+  allergies: string;
+  targetSport: string;
+  gamePlayed: string;
+  dietPreference: string;
+  preferredFoods: string;
+  healthConditions: string;
+  location: string;
+  weight: string;
+  height: string;
+}
+
+const LOCALE_STORAGE_KEY = 'userProfile';
+
+const DEFAULT_BADGES = [
+  '/images/badges/badge1.png',
+  '/images/badges/badge2.png',
+  '/images/badges/badge3.png',
+];
+
+const DEFAULT_TOURNAMENTS = [
+  { id: 1, name: 'Summer Championship', date: '2023-07-15', result: 'Winner' },
+  { id: 2, name: 'City League', date: '2023-09-10', result: 'Runner-Up' },
+  { id: 3, name: 'National Finals', date: '2024-03-22', result: 'Participant' },
+];
+
+// Create an Axios instance
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+});
+
 export default function SettingsPage() {
-  const { user, loading } = useAuth();
+  const { user, token, loading } = useAuth();
   const router = useRouter();
 
-  // Form state
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<UserProfile>({
     allergies: '',
     targetSport: '',
     gamePlayed: '',
@@ -42,27 +71,14 @@ export default function SettingsPage() {
     location: '',
     weight: '',
     height: '',
-    // Add other athlete-related fields here
   });
 
-  // Sample data for badges and tournaments
-  const [badges] = useState<string[]>([
-    '/images/badges/badge1.png',
-    '/images/badges/badge2.png',
-    '/images/badges/badge3.png',
-  ]);
-
-  const [tournaments] = useState<Tournament[]>([
-    { id: 1, name: 'Summer Championship', date: '2023-07-15', result: 'Winner' },
-    { id: 2, name: 'City League', date: '2023-09-10', result: 'Runner-Up' },
-    { id: 3, name: 'National Finals', date: '2024-03-22', result: 'Participant' },
-  ]);
+  const [badges, setBadges] = useState<string[]>(DEFAULT_BADGES);
+  const [tournaments, setTournaments] = useState<Tournament[]>(DEFAULT_TOURNAMENTS);
 
   // Handle input changes
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     setFormData({
       ...formData,
@@ -75,34 +91,79 @@ export default function SettingsPage() {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/dashboard/settings', {
-        method: 'POST',
+      const response = await api.put('/profile', formData, {
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
       });
-
-      if (response.ok) {
-        // Handle success (e.g., show a success message or redirect)
+      
+      if (response.status === 200) {
+        localStorage.setItem(LOCALE_STORAGE_KEY, JSON.stringify(response.data));
         alert('Profile updated successfully!');
-      } else {
-        // Handle errors
-        const errorData = await response.json();
-        alert(`Error: ${errorData.message}`);
       }
-    } catch (error) {
-      console.error('An unexpected error occurred:', error);
-      alert('An unexpected error occurred. Please try again later.');
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        router.push('/login');
+        return;
+      }
+      
+      const errorMessage = error.response?.data?.message || 'An unexpected error occurred. Please try again later.';
+      console.error('Error updating profile:', error);
+      alert(errorMessage);
     }
   };
 
-  // Redirect if not authenticated
+  // Fetch user profile data
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/'); // Redirect to home/login page if not authenticated
+    const fetchProfile = async () => {
+      try {
+        const response = await api.get('/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
+        if (response.status === 200) {
+          setFormData(response.data);
+          localStorage.setItem(LOCALE_STORAGE_KEY, JSON.stringify(response.data));
+          
+          if (response.data.badges) {
+            setBadges(response.data.badges);
+          }
+          if (response.data.tournaments) {
+            setTournaments(response.data.tournaments);
+          }
+        }
+      } catch (error: any) {
+        if (error.response?.status === 401) {
+          router.push('/login');
+          return;
+        }
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    // Try to load from cache first
+    const cachedProfile = localStorage.getItem(LOCALE_STORAGE_KEY);
+    if (cachedProfile) {
+      const parsedProfile = JSON.parse(cachedProfile);
+      setFormData(parsedProfile);
+      if (parsedProfile.badges) setBadges(parsedProfile.badges);
+      if (parsedProfile.tournaments) setTournaments(parsedProfile.tournaments);
+    } 
+    // If we have a token but no cached data, fetch from API
+    else if (token) {
+      fetchProfile();
     }
-  }, [user, loading, router]);
+  }, [token, router]);
+
+  // Authentication check
+  useEffect(() => {
+    if (!loading && !token) {
+      router.push('/login');
+    }
+  }, [token, loading, router]);
 
   if (loading) {
     return (
@@ -112,7 +173,7 @@ export default function SettingsPage() {
     );
   }
 
-  if (!user) {
+  if (!user || !token) {
     return null;
   }
 
@@ -167,7 +228,6 @@ export default function SettingsPage() {
               <FaRulerVertical className="mr-2 text-gray-500" />
               <span>Height: {formData.height || 'N/A'} cm</span>
             </li>
-            {/* Add more metrics as needed */}
           </ul>
         </div>
 
@@ -184,8 +244,7 @@ export default function SettingsPage() {
                   <span className="font-semibold">{tournament.name}</span>
                   <br />
                   <span className="text-sm text-gray-500">
-                    {new Date(tournament.date).toLocaleDateString()} -{' '}
-                    {tournament.result}
+                    {new Date(tournament.date).toLocaleDateString()} - {tournament.result}
                   </span>
                 </div>
               </li>
@@ -209,9 +268,7 @@ export default function SettingsPage() {
           <form onSubmit={handleSubmit}>
             {/* Personal Information */}
             <div className="mb-6">
-              <h2 className="text-xl font-medium text-gray-700 mb-4">
-                Personal Information
-              </h2>
+              <h2 className="text-xl font-medium text-gray-700 mb-4">Personal Information</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Allergies */}
                 <div className="flex flex-col">
@@ -285,9 +342,7 @@ export default function SettingsPage() {
 
             {/* Health Information */}
             <div className="mb-6">
-              <h2 className="text-xl font-medium text-gray-700 mb-4">
-                Health Information
-              </h2>
+              <h2 className="text-xl font-medium text-gray-700 mb-4">Health Information</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Health Conditions */}
                 <div className="flex flex-col md:col-span-2">
@@ -309,9 +364,7 @@ export default function SettingsPage() {
 
             {/* Sport Preferences */}
             <div className="mb-6">
-              <h2 className="text-xl font-medium text-gray-700 mb-4">
-                Sport Preferences
-              </h2>
+              <h2 className="text-xl font-medium text-gray-700 mb-4">Sport Preferences</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Target Sport */}
                 <div className="flex flex-col">

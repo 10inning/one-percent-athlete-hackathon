@@ -1,45 +1,16 @@
-
 'use client';
 import React, { useState, useEffect } from 'react';
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell
-} from 'recharts';
-import {
-  Activity, TrendingUp, Award, Calendar
-} from 'lucide-react';
-import NutritionPlan from '@/components/layout/Nutrition'; // Import the NutritionPlan component
-
-const performanceData = [
-  { month: 'Jan', performance: 65 },
-  { month: 'Feb', performance: 75 },
-  { month: 'Mar', performance: 85 },
-  { month: 'Apr', performance: 82 },
-  { month: 'May', performance: 90 },
-  { month: 'Jun', performance: 88 },
-];
-
-const workoutDistribution = [
-  { name: 'Strength', value: 35 },
-  { name: 'Cardio', value: 25 },
-  { name: 'Recovery', value: 20 },
-  { name: 'Flexibility', value: 20 },
-];
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+import { Activity, TrendingUp, Award, Calendar } from 'lucide-react';
+import NutritionPlan from '@/components/layout/Nutrition';
+import { motion } from 'framer-motion';
+import VideoUpload from '@/components/layout/VideoUpload';
 
 const newsData = [
   {
     title: 'Top Athletes Share Their Training Secrets',
     link: '#',
-  },
-  {
-    title: 'Nutrition Tips for Peak Performance',
-    link: '#',
-  },
-  {
-    title: 'How Sleep Affects Muscle Recovery',
-    link: '#',
+    image: 'https://via.placeholder.com/400x200',
+    description: 'Discover the routines and habits that elite athletes swear by to maintain peak performance.',
   },
 ];
 
@@ -53,128 +24,114 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch data here if needed
-    setLoading(false);
+    const fetchData = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setLoading(false);
+    };
+    fetchData();
   }, []);
 
   if (loading) {
     return (
-      <div className="h-full flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900" />
+      <div className="flex items-center justify-center h-full bg-gradient-to-r from-gray-100 to-gray-200">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500" />
       </div>
     );
   }
 
   return (
-    <div className="p-8 overflow-y-auto grid grid-cols-12 gap-6">
-      {/* Nutrition Section */}
-      <div className="col-span-12">
-        <NutritionPlan />
+<div className="col-span-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 h-20">      {/* First Row: Stats */}
+      <div className="col-span-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 h-20">
+      {[
+          {
+            icon: <Activity className="h-6 w-6 text-blue-500" />,
+            label: 'Total Workouts',
+            value: stats.totalWorkouts,
+          },
+          {
+            icon: <TrendingUp className="h-6 w-6 text-green-500" />,
+            label: 'Avg Performance',
+            value: `${stats.avgPerformance}%`,
+          },
+          {
+            icon: <Award className="h-6 w-6 text-yellow-500" />,
+            label: 'Achievements',
+            value: stats.achievements,
+          },
+          {
+            icon: <Calendar className="h-6 w-6 text-purple-500" />,
+            label: 'Ranking',
+            value: stats.ranking,
+          },
+        ].map((stat, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-lg shadow-md p-4 flex items-center"
+          >
+            {stat.icon}
+            <div className="ml-3">
+              <p className="text-xs font-medium text-gray-500">{stat.label}</p>
+              <h3 className="text-xl font-bold text-gray-800">{stat.value}</h3>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Main Content */}
-      <div className="col-span-9">
-        {/* Top Stats Cards */}
-        <div className="grid grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center">
-              <Activity className="h-8 w-8 text-blue-500" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Workouts</p>
-                <h3 className="text-2xl font-bold">{stats.totalWorkouts}</h3>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center">
-              <TrendingUp className="h-8 w-8 text-green-500" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Avg Performance</p>
-                <h3 className="text-2xl font-bold">{stats.avgPerformance}%</h3>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center">
-              <Award className="h-8 w-8 text-yellow-500" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Achievements</p>
-                <h3 className="text-2xl font-bold">{stats.achievements}</h3>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center">
-              <Calendar className="h-8 w-8 text-purple-500" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Ranking</p>
-                <h3 className="text-2xl font-bold">{stats.ranking}</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Charts */}
-        <div className="grid grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold mb-4">Performance Trend</h3>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={performanceData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Area
-                    type="monotone"
-                    dataKey="performance"
-                    stroke="#8884d8"
-                    fill="#8884d8"
-                    fillOpacity={0.3}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold mb-4">Workout Distribution</h3>
-            <div className="h-80 flex items-center justify-center">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={workoutDistribution}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                    label
-                  >
-                    {workoutDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* News Section */}
-      <div className="col-span-3">
-        <h2 className="text-2xl font-bold mb-4">Athlete News</h2>
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <ul className="space-y-4">
+      {/* Second Row: Nutrition Plan & Athlete News */}
+      <div className="col-span-12 grid grid-cols-12 gap-6">
+        <motion.div
+          className="col-span-9 h-full"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        >
+          <NutritionPlan />
+        </motion.div>
+        <div className="col-span-3 h-full bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">
+            Athlete News
+          </h2>
+          <ul className="space-y-6">
             {newsData.map((newsItem, index) => (
-              <li key={index}>
-                <a href={newsItem.link} className="text-blue-600 hover:underline">
-                  {newsItem.title}
-                </a>
-              </li>
+              <motion.li
+                key={index}
+                className="flex items-start space-x-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.2, duration: 0.5, ease: 'easeOut' }}
+              >
+                <img
+                  src={newsItem.image}
+                  alt={newsItem.title}
+                  className="w-28 h-20 object-cover rounded-lg shadow-sm"
+                />
+                <div>
+                  <a
+                    href={newsItem.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline text-lg font-semibold"
+                  >
+                    {newsItem.title}
+                  </a>
+                  <p className="text-gray-600 mt-2 text-sm leading-relaxed">
+                    {newsItem.description}
+                  </p>
+                </div>
+              </motion.li>
             ))}
           </ul>
+        </div>
+      </div>
+
+      {/* Third Row: Analyze Your Form */}
+      <div className="col-span-12 bg-gray-100 rounded-lg shadow-lg p-8 text-center space-y-6">
+        <h2 className="text-2xl font-semibold">Analyze Your Form</h2>
+        <p className="text-sm text-gray-600">
+          Upload your workout video to receive actionable insights and tips for improvement.
+        </p>
+        <div className="flex justify-center">
+          <VideoUpload />
         </div>
       </div>
     </div>

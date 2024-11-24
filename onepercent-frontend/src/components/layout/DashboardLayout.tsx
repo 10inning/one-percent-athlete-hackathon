@@ -22,19 +22,34 @@ interface DashboardLayoutProps {
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { user, setUser, setToken } = useAuth();
+  const { user, setUser, setToken,setSessionId } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      setUser(null);
-      setToken(null);
-      localStorage.removeItem('auth-token');
+        // Sign out the user from the authentication system
+        await signOut(auth);
+
+        // Clear local React state
+        setUser(null);
+        setToken(null);
+        setSessionId(null); // Clear any session ID or other state
+
+        // Clear browser storage
+        localStorage.clear(); // Removes all items from localStorage
+        sessionStorage.clear(); // Removes all items from sessionStorage
+
+        // // Clear cookies if any
+        // document.cookie = "auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        // document.cookie = "sessionId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+        // Optionally redirect the user to the login or home page
+        window.location.href = '/login'; // Adjust URL based on routing
     } catch (error) {
-      console.error('Logout error:', error);
+        console.error('Logout error:', error);
     }
-  };
+};
+
 
   return (
     <div className="h-screen flex overflow-hidden bg-gray-50">

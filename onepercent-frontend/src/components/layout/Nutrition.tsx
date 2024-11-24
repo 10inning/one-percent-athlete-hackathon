@@ -3,7 +3,8 @@ import axios from 'axios';
 import { Save, X, Wand2 } from 'lucide-react';
 import { useAuth } from '@/store/userAuth';
 import DynamicIcon from '@/components/utils/DynamicIcons';
-
+import { FaAppleAlt } from "react-icons/fa";
+import { motion } from "framer-motion";
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
 });
@@ -209,98 +210,112 @@ export default function NutritionPlan() {
   }
 
   return (
-    <div className="flex flex-col justify-between bg-white rounded-lg shadow-md p-6 h-full">
-      <div>
-        <div className="text-center mb-4">
-          <h2 className="text-xl font-semibold">Nutrition Plan</h2>
-          {mealPlan.date && (
-            <p className="text-sm text-gray-500 mt-1">
-              {formatDate(mealPlan.date)}
-            </p>
-          )}
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {mealPlan.meal_plan.map((meal, index) => (
-            <div key={index} className="bg-gray-100 rounded-lg shadow-sm p-3">
-              <div className="flex items-center">
-                <DynamicIcon iconName={meal.icon} className="h-6 w-6 text-green-500" />
-                <h3 className="ml-3 text-md font-medium">{meal.meal}</h3>
-              </div>
-              <ul className="mt-2 list-disc list-inside text-gray-600 text-sm">
-                {meal.items.map((item, idx) => (
-                  <li key={idx}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="mt-6 flex flex-col items-center">
-        {loading && currentMessage && (
-          <div className="mb-2 text-center text-xs text-gray-500">{currentMessage}</div>
-        )}
-        <div className="flex justify-center space-x-3">
-          {hasGenerated && !loading && (
-            <>
-              <button
-                onClick={resetMealPlan}
-                aria-label="Reset Meal Plan"
-                className="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 flex items-center text-sm"
-              >
-                <X className="h-4 w-4 mr-1" />
-                Reset
-              </button>
-              <button
-                onClick={saveMealPlan}
-                aria-label="Save Meal Plan"
-                className="px-3 py-1 bg-green-400 text-white rounded-md hover:bg-green-500 flex items-center text-sm"
-              >
-                <Save className="h-4 w-4 mr-1" />
-                Save
-              </button>
-            </>
-          )}
-          <button
-            onClick={generateMealPlan}
-            disabled={loading}
-            className={`px-4 py-2 bg-blue-400 text-white rounded-md hover:bg-blue-500 flex items-center text-sm transition-opacity duration-200 ${
-              loading ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-            aria-label="Generate New Meal Plan"
-          >
-            {loading ? (
-              <>
-                <svg
-                  className="animate-spin h-4 w-4 mr-1 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8H4z"
-                  ></path>
-                </svg>
-                {currentMessage ? currentMessage : 'Generating...'}
-              </>
-            ) : (
-              <>
-                <Wand2 className="h-4 w-4 mr-1" />
-                Generate
-              </>
-            )}
-          </button>
-        </div>
-      </div>
+   <div className="flex flex-col justify-between bg-white rounded-lg shadow-md p-3 h-full">
+  <div>
+  <div className="text-center mb-6 p-6 bg-gradient-to-r from-green-200 via-blue-100 to-purple-200 rounded-lg shadow-lg">
+      <motion.h2
+        className="text-2xl font-bold text-gray-800 flex items-center justify-center gap-2"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <FaAppleAlt className="text-green-500" />
+        Nutrition Plan
+      </motion.h2>
+      {mealPlan.date && (
+        <motion.p
+          className="text-sm text-gray-600 mt-2 italic"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
+          {formatDate(mealPlan.date)}
+        </motion.p>
+      )}
     </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+      {mealPlan.meal_plan.map((meal, index) => (
+        <div key={index} className="bg-gray-100 rounded-lg shadow-sm p-2">
+          <div className="flex items-center mb-2">
+            <DynamicIcon iconName={meal.icon} className="h-5 w-5 text-green-500" />
+            <h3 className="ml-2 text-md font-medium">{meal.meal}</h3>
+          </div>
+          <ul className="list-disc list-inside text-gray-600 text-sm">
+            {meal.items.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+  <div className="mt-4 flex flex-col items-center">
+    {loading && currentMessage && (
+      <div className="mb-2 text-xs text-gray-500 text-center">{currentMessage}</div>
+    )}
+    <div className="flex justify-center space-x-2">
+      {hasGenerated && !loading && (
+        <>
+          <button
+            onClick={resetMealPlan}
+            aria-label="Reset Meal Plan"
+            className="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 flex items-center text-sm"
+          >
+            <X className="h-4 w-4 mr-1" />
+            Reset
+          </button>
+          <button
+            onClick={saveMealPlan}
+            aria-label="Save Meal Plan"
+            className="px-3 py-1 bg-green-400 text-white rounded-md hover:bg-green-500 flex items-center text-sm"
+          >
+            <Save className="h-4 w-4 mr-1" />
+            Save
+          </button>
+        </>
+      )}
+      <button
+        onClick={generateMealPlan}
+        disabled={loading}
+        className={`px-4 py-2 bg-blue-400 text-white rounded-md hover:bg-blue-500 flex items-center text-sm ${
+          loading ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
+        aria-label="Generate New Meal Plan"
+      >
+        {loading ? (
+          <>
+            <svg
+              className="animate-spin h-4 w-4 mr-1 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8H4z"
+              ></path>
+            </svg>
+            {currentMessage || 'Generating...'}
+          </>
+        ) : (
+          <>
+            <Wand2 className="h-4 w-4 mr-1" />
+            Generate
+          </>
+        )}
+      </button>
+    </div>
+  </div>
+</div>
+
   );
 }
