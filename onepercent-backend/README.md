@@ -119,17 +119,9 @@ For production deployment:
 ## ⚠️ Important Notes
 
 - Keep your Firebase private key and OpenAI API key secure
-- The `app/certs` directory should contain your Firebase admin SDK JSON file
-- ML models should be placed in the `ml/model` directory
+- ML models should be placed in the `ml/mlmodels` directory
 - Environment variables marked as `NEXT_PUBLIC` are for client-side Firebase configuration
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 📝 License
 
