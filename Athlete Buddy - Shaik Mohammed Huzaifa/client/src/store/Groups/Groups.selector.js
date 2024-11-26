@@ -1,0 +1,1 @@
+export const GroupsSelector = (state) => state.groups.travelling_groups;

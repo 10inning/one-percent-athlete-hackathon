@@ -1,0 +1,52 @@
+.athlete-profile-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.192);
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    box-sizing: border-box;
+    .athlete-profile{
+        width: 30%;
+        background-color: white;
+        border-radius: 10px;
+        padding: 10px;
+        .icon{
+            button{
+                background-color: #2ab;
+                color: white;
+                padding: 8px;
+                font-size: 20px;
+            }
+        }
+        .profile{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            img{
+                width: 150px;
+                height: 150px;
+                padding: 20px;
+                box-sizing: border-box;
+                border-radius: 50%;
+            }
+            p{
+                color: black;
+                font-size: 30px;
+                font-weight: 500;
+
+            }
+        }
+        .main-details{
+            width: 100%;
+            padding: 10px;
+            h3{
+                font-size: 20px;
+            }
+        }
+    }
+}
