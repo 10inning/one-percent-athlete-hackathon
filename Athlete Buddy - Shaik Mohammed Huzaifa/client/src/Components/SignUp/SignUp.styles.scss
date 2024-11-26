@@ -1,0 +1,102 @@
+.signup-form-container {
+    width: 400px;
+    height: fit-content;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    // box-sizing: border-box;
+    padding: 3%;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+  
+    span {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1rem;
+      display: block;
+    }
+  
+    .logo {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 94%;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      align-items: center;
+      gap: 1rem;
+  
+      div {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        label {
+          font-size: 0.9rem;
+          color: #555;
+          margin-bottom: 0.5rem;
+        }
+  
+        input {
+          width: 100%;
+          padding: 0.8rem;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          font-size: 1rem;
+          color: #333;
+  
+          &:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+          }
+        }
+      }
+  
+      button {
+        padding: 0.8rem;
+        min-width: 107%;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        margin: auto;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        column-gap: 10px;
+        align-items: center;
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+    
+  }
+  

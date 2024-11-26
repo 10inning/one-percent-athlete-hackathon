@@ -1,0 +1,1 @@
+export const PromptSelector = (state) => state.Prompts.prompt;

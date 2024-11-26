@@ -1,0 +1,1 @@
+export const EventsSelector = (state) => state.events.cultural_events
